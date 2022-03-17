@@ -60,9 +60,7 @@ int main()
 	//d->ByMutation(d->activePopulations[0]);
 	d->ByCrossover(d->activePopulations[0], d->activePopulations[12]);
 	delete d;
-	d = nullptr; //TODO cleaner klass
-	//delete h;
-	//h = nullptr;
+	d = nullptr; //TODO cleaner klass ??
 
 	return 0;
 }

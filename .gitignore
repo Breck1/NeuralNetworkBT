@@ -30,3 +30,10 @@
 *.exe
 *.out
 *.app
+.vs/TestLua/v16/ipch/AutoPCH/2e237478d9410b28/DARWIN.ipch
+.vs/TestLua/v16/ipch/AutoPCH/7818bb4138509b1e/MAIN.ipch
+.vs/TestLua/v16/.suo
+.vs/TestLua/v16/Browse.VC.db
+.vs/TestLua/v16/Browse.VC.db-shm
+.vs/TestLua/v16/Browse.VC.db-wal
+.vs/TestLua/v16/Browse.VC.opendb
