@@ -94,8 +94,8 @@ void Darwin::InitPopulation(int popSize, int topology)
 std::vector<Gene> Darwin::SelectGenome(Population pop)
 {
 
-	std::vector<Gene> lmao;
-	lmao.resize(pop.genes.size());
+	std::vector<Gene> selectedGenome;
+	selectedGenome.resize(pop.genes.size());
 
 	if(pop.selection == E_Selection::roulette)
 	{
@@ -106,18 +106,22 @@ std::vector<Gene> Darwin::SelectGenome(Population pop)
 			passedFitness += pop.genes[i].fitness;
 			if(passedFitness >= target)
 			{
-				lmao.push_back(pop.genes[i]);
+				selectedGenome.push_back(pop.genes[i]);
 			}
 		}
 
-		return lmao;
+		return selectedGenome;
 	}
 	else if(pop.selection == E_Selection::tournament)
 	{
-		//Hämta 4 random gener och returna
-		return lmao;
+		for(int i = 0; i < 4; i++)
+		{
+			selectedGenome.push_back(pop.genes[hf->GetRandomNumber(i)]);
+		}
+		//sortera 
+		return selectedGenome;
 	}
-	return lmao;
+	return selectedGenome;
 }
 
 void Darwin::RecalculatePopulationFitness(Population pop)
@@ -138,6 +142,7 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 	pop.avgFitness = pop.totalFitness / pop.genes.size();
 	pop.maxFitness = tempMaxFit;
 	pop.minFitness = tempMinFit;
+	//sort
 
 }
 
