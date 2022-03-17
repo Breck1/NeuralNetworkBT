@@ -176,3 +176,39 @@ void Darwin::EvolvePopulation(Population elites)
 }
 #pragma endregion
 
+std::vector<Population> Darwin::GetActivePopulations()
+{
+	return activePopulations;
+}
+Population Darwin::GetActivePopulation(int index)
+{
+	return activePopulations[index];
+}
+int Darwin::GetActivePopulationSize()
+{
+	return activePopulations.size();
+}
+int Darwin::GetGeneration()
+{
+	return generations;
+}
+std::string Darwin::GetGenerationString(Population pop)
+{
+	std::string generationString = "Generations: ";
+	generationString += std::to_string(generations);
+	generationString += " max: ";
+	generationString += std::to_string(pop.maxFitness);
+	generationString += " avg: ";
+	generationString += std::to_string(pop.avgFitness);
+	return generationString;
+}
+Gene Darwin::GetBestGenome(Population pop)
+{
+	return pop.genes[0];
+}
+
+Gene Darwin::GetWorstGenome(Population pop)
+{
+	return pop.genes.back();
+}
+
