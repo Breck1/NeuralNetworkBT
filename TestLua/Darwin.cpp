@@ -141,9 +141,38 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 
 }
 
-void Darwin::EvolvePopulation()
-{
+void Darwin::EvolvePopulation(Population elites)
+{	
 
+	Population newPopulation;
+	int numElites = elites.numElites;
+	
+	// copy elites
+	for (int i = 0; i < numElites; i++)
+	{
+		newPopulation.genes.push_back(elites.genes[i]);
+	}
+
+	// create the rest by mutation and crossover
+	while (newPopulation.genes.size() < elites.genes.size())
+	{
+		Population mother;
+		Population father;
+		Population child;
+		mother.genes = SelectGenome(elites);
+		father.genes = SelectGenome(elites);
+		child = mother;
+
+		if (hf->GetRandomNumber() < elites.crossRate)
+			child.genes = ByCrossover(mother, father);
+		
+		Population mutated;
+		mutated.genes = ByMutation(child);
+
+
+		newPopulation = mutated;
+		generations++;
+	}
 }
 #pragma endregion
 
