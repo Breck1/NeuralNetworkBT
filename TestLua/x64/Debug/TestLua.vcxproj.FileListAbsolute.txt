@@ -1,1 +1,0 @@
-C:\Dev\TestLua\TestLua\TestLua\x64\Debug\TestLua.vcxproj.CopyComplete

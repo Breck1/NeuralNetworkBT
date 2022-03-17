@@ -146,9 +146,74 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 
 }
 
-void Darwin::EvolvePopulation()
-{
+void Darwin::EvolvePopulation(Population elites)
+{	
 
+	Population newPopulation;
+	int numElites = elites.numElites;
+	
+	// copy elites
+	for (int i = 0; i < numElites; i++)
+	{
+		newPopulation.genes.push_back(elites.genes[i]);
+	}
+
+	// create the rest by mutation and crossover
+	while (newPopulation.genes.size() < elites.genes.size())
+	{
+		Population mother;
+		Population father;
+		Population child;
+		mother.genes = SelectGenome(elites);
+		father.genes = SelectGenome(elites);
+		child = mother;
+
+		if (hf->GetRandomNumber() < elites.crossRate)
+			child.genes = ByCrossover(mother, father);
+		
+		Population mutated;
+		mutated.genes = ByMutation(child);
+
+
+		newPopulation = mutated;
+		generations++;
+	}
 }
 #pragma endregion
+
+std::vector<Population> Darwin::GetActivePopulations()
+{
+	return activePopulations;
+}
+Population Darwin::GetActivePopulation(int index)
+{
+	return activePopulations[index];
+}
+int Darwin::GetActivePopulationSize()
+{
+	return activePopulations.size();
+}
+int Darwin::GetGeneration()
+{
+	return generations;
+}
+std::string Darwin::GetGenerationString(Population pop)
+{
+	std::string generationString = "Generations: ";
+	generationString += std::to_string(generations);
+	generationString += " max: ";
+	generationString += std::to_string(pop.maxFitness);
+	generationString += " avg: ";
+	generationString += std::to_string(pop.avgFitness);
+	return generationString;
+}
+Gene Darwin::GetBestGenome(Population pop)
+{
+	return pop.genes[0];
+}
+
+Gene Darwin::GetWorstGenome(Population pop)
+{
+	return pop.genes.back();
+}
 

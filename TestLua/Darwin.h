@@ -2,6 +2,7 @@
 #include <vector>
 #include <cmath>
 #include <time.h>
+#include <iostream>
 #include "Population.h"
 #include "Genome.h"
 #include "NeuralNetwork.h"
@@ -26,11 +27,21 @@ public:
 	void InitPopulation(int popSize, int topology);
 	std::vector<Gene> SelectGenome(Population pop);
 	void RecalculatePopulationFitness(Population pop); //klar 
-	void EvolvePopulation();
+	void EvolvePopulation(Population elites);
 #pragma endregion
 
+#pragma region get genomes
+
+    std::vector<Population>GetActivePopulations();
+    Population GetActivePopulation(int index);
+    int GetActivePopulationSize();
+    int GetGeneration();
+	std::string GetGenerationString(Population pop);
+	Gene GetBestGenome(Population pop);
+	Gene GetWorstGenome(Population pop);
+#pragma endregion
 private:
 	HelperFuncs* hf;
-
+	int generations = 0;
 };
 
