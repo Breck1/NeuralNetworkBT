@@ -65,6 +65,8 @@ std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 		else
 			genes[i] = father.genes[i];
 	}
+	hf->SortGenes(genes);
+
 	return genes;
 }
 
@@ -109,6 +111,7 @@ std::vector<Gene> Darwin::SelectGenome(Population pop)
 				lmao.push_back(pop.genes[i]);
 			}
 		}
+		hf->SortGenes(lmao);
 
 		return lmao;
 	}
@@ -134,6 +137,7 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 		if(pop.genes[i].fitness < tempMinFit)
 			tempMinFit = pop.genes[i].fitness;
 	}
+	hf->SortGenes(pop.genes);
 
 	pop.avgFitness = pop.totalFitness / pop.genes.size();
 	pop.maxFitness = tempMaxFit;
@@ -171,6 +175,7 @@ void Darwin::EvolvePopulation(Population elites)
 
 
 		newPopulation = mutated;
+
 		generations++;
 	}
 }
