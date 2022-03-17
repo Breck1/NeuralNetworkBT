@@ -6,6 +6,7 @@
 #include "Genome.h"
 #include "NeuralNetwork.h"
 #include "HelperFuncs.h"
+
 class Darwin
 {
 public:
@@ -23,7 +24,8 @@ public:
 #pragma region population methods
 
 	void InitPopulation(int popSize, int topology);
-
+	void SelectGenome(Population pop);
+	void RecalculatePopulationFitness(Population pop); //klar
 #pragma endregion
 
 private:

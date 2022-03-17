@@ -3,11 +3,12 @@
 #include <vector>
 #include <iostream>
 
-enum selection : int
+enum E_Selection : int
 {
 	roulette,
 	tournament
 };
+
 struct Population
 {
 public:
@@ -24,7 +25,7 @@ public:
 
 	std::string name;
 
-	selection selection;
+	E_Selection selection;
 	std::vector<Gene> genes;
 
 };

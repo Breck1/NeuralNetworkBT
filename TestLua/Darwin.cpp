@@ -11,6 +11,8 @@ Darwin::~Darwin()
 	hf = nullptr;
 }
 
+#pragma region genome methods
+
 std::vector<Gene> Darwin::InitGenes(int topology)
 {
 	std::vector<Gene> genePerPop;
@@ -20,11 +22,11 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 		Gene g;
 		g.fitness = 0;
 		g.index = i;
-		
+
 		g.value = hf->GetRandomNumber(i);
 		genePerPop.push_back(g);
 
-		
+
 	}
 	return genePerPop;
 }
@@ -38,7 +40,7 @@ std::vector<Gene> Darwin::ByMutation(Population source)
 		{
 			gene[i].value += hf->GetRandomNumber() * source.mutMax;
 			gene[i].value -= hf->GetRandomNumber(i) * source.mutMax;
-			
+
 			//clamp value
 			gene[i].value > 1 ? 1 : gene[i].value;
 			gene[i].value < -1 ? -1 : gene[i].value;
@@ -47,6 +49,7 @@ std::vector<Gene> Darwin::ByMutation(Population source)
 
 	return gene;
 }
+
 std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 {
 	std::vector<Gene> genes;
@@ -64,7 +67,11 @@ std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 	}
 	return genes;
 }
-//Initializes all the populations
+
+#pragma endregion
+
+#pragma region population methods
+
 void Darwin::InitPopulation(int popSize, int topology)
 {
 	for(int i = 0; i < popSize; i++)
@@ -75,12 +82,48 @@ void Darwin::InitPopulation(int popSize, int topology)
 		p.numElites = 2;
 		p.crossRate = 0.7f;
 
-		p.selection = selection::roulette;
+		p.selection = E_Selection::roulette;
 		p.name = "abc " + i;
 		p.genes = InitGenes(topology);
-		
+
 		activePopulations.push_back(p);
 
 	}
 }
+
+void Darwin::SelectGenome(Population pop)
+{
+
+	if(pop.selection == E_Selection::roulette)
+	{
+
+	}
+	else if(pop.selection == E_Selection::tournament)
+	{
+
+	}
+
+}
+
+void Darwin::RecalculatePopulationFitness(Population pop)
+{
+	float tempMinFit = 10000; //big because might use float max later
+	float tempMaxFit = -1; //might use epsilon later
+
+	for(int i = 0; i < pop.genes.size(); i++)
+	{
+		pop.totalFitness += pop.genes[i].fitness;
+
+		if(pop.genes[i].fitness > tempMaxFit)
+			tempMaxFit = pop.genes[i].fitness;
+		if(pop.genes[i].fitness < tempMinFit)
+			tempMinFit = pop.genes[i].fitness;
+	}
+
+	pop.avgFitness = pop.totalFitness / pop.genes.size();
+	pop.maxFitness = tempMaxFit;
+	pop.minFitness = tempMinFit;
+
+}
+#pragma endregion
 
