@@ -91,7 +91,7 @@ void Darwin::InitPopulation(int popSize, int topology)
 	}
 }
 
-std::vector<Gene> Darwin::SelectGenome(Population pop)
+Gene Darwin::SelectGenome(Population pop)
 {
 
 	std::vector<Gene> selectedGenome;
@@ -107,21 +107,19 @@ std::vector<Gene> Darwin::SelectGenome(Population pop)
 			if(passedFitness >= target)
 			{
 				selectedGenome.push_back(pop.genes[i]);
+				break;
 			}
 		}
-
-		return selectedGenome;
 	}
 	else if(pop.selection == E_Selection::tournament)
 	{
-		for(int i = 0; i < 4; i++)
+		for(int i = 0; i < 3; i++)
 		{
 			selectedGenome.push_back(pop.genes[hf->GetRandomNumber(i)]);
 		}
 		//sortera 
-		return selectedGenome;
 	}
-	return selectedGenome;
+	return selectedGenome.back();
 }
 
 void Darwin::RecalculatePopulationFitness(Population pop)
@@ -147,40 +145,43 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 }
 
 void Darwin::EvolvePopulation(Population elites)
-{	
+{
 
 	Population newPopulation;
 	int numElites = elites.numElites;
-	
+
 	// copy elites
-	for (int i = 0; i < numElites; i++)
+	for(int i = 0; i < numElites; i++)
 	{
 		newPopulation.genes.push_back(elites.genes[i]);
 	}
 
+	Population mutated;
 	// create the rest by mutation and crossover
-	while (newPopulation.genes.size() < elites.genes.size())
+	while(newPopulation.genes.size() < elites.genes.size())
 	{
 		Population mother;
 		Population father;
 		Population child;
-		mother.genes = SelectGenome(elites);
-		father.genes = SelectGenome(elites);
+		mother.genes.push_back(SelectGenome(elites));
+		father.genes.push_back(SelectGenome(elites));
 		child = mother;
 
-		if (hf->GetRandomNumber() < elites.crossRate)
+		if(hf->GetRandomNumber() < elites.crossRate)
 			child.genes = ByCrossover(mother, father);
-		
-		Population mutated;
+
 		mutated.genes = ByMutation(child);
 
-
 		newPopulation = mutated;
-		generations++;
 	}
+
+	elites.genes = newPopulation.genes;
+	generations++;
 }
 #pragma endregion
 
+
+#pragma region gettersNsetters
 std::vector<Population> Darwin::GetActivePopulations()
 {
 	return activePopulations;
@@ -211,9 +212,9 @@ Gene Darwin::GetBestGenome(Population pop)
 {
 	return pop.genes[0];
 }
-
 Gene Darwin::GetWorstGenome(Population pop)
 {
 	return pop.genes.back();
 }
+#pragma endregion
 

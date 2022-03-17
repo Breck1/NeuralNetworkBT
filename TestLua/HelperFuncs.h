@@ -30,4 +30,5 @@ public:
 		return (float)rand() / RAND_MAX;
 
 	}
+	
 };

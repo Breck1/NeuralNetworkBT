@@ -7,7 +7,6 @@ public:
 	float fitness;
 	int index;
 	float value;
-
 }; 
 
 
