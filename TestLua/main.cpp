@@ -62,6 +62,15 @@ int main()
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 
+	InitNewTest();
+	while(true) //update until you lose or stand still too long
+	{
+		Update();
+
+		//lua emu. frameadvance
+	}
+
+
 	return 0;
 }
 
@@ -78,6 +87,10 @@ void CompleteTest()
 
 void InitNewTest()
 {
+
+
+
+
 
 }
 #pragma endregion
