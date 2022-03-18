@@ -6,7 +6,7 @@
 
 
 
-class NeuralNetwork //??
+class NeuralNetwork //TODO maybe remove this shit
 {
 
 public:
