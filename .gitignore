@@ -40,3 +40,17 @@
 .vs/TestLua/v16/Browse.VC.opendb
 /x64
 TestLua/x64/Debug/TestLua.exe.recipe
+TestLua/x64/Debug/TestLua.ilk
+TestLua/x64/Debug/TestLua.log
+TestLua/x64/Debug/TestLua.vcxproj.FileListAbsolute.txt
+TestLua/x64/Debug/vc142.idb
+TestLua/x64/Debug/vc142.pdb
+TestLua/x64/Debug/vcpkg.applocal.log
+TestLua/x64/Debug/TestLua.tlog/CL.command.1.tlog
+TestLua/x64/Debug/TestLua.tlog/CL.read.1.tlog
+TestLua/x64/Debug/TestLua.tlog/CL.write.1.tlog
+TestLua/x64/Debug/TestLua.tlog/link.command.1.tlog
+TestLua/x64/Debug/TestLua.tlog/link.read.1.tlog
+TestLua/x64/Debug/TestLua.tlog/link.write.1.tlog
+TestLua/x64/Debug/TestLua.tlog/TestLua.lastbuildstate
+TestLua/x64/Debug/TestLua.tlog/TestLua.write.1u.tlog
