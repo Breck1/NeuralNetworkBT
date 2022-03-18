@@ -154,14 +154,20 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Darwin.cpp" />
+    <ClCompile Include="ManageInputOutput.cpp" />
     <ClCompile Include="main.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Darwin.h" />
     <ClInclude Include="Genome.h" />
     <ClInclude Include="HelperFuncs.h" />
+    <ClInclude Include="ManageInputOutput.h" />
     <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Population.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LuaScript\InputOutput.lua" />
+    <None Include="LuaScript\Megaman X.lua" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

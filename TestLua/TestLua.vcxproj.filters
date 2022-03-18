@@ -13,6 +13,9 @@
       <UniqueIdentifier>{67DA6AB6-F800-4c08-8B7A-83BB121AAD01}</UniqueIdentifier>
       <Extensions>rc;ico;cur;bmp;dlg;rc2;rct;bin;rgs;gif;jpg;jpeg;jpe;resx;tiff;tif;png;wav;mfcribbon-ms</Extensions>
     </Filter>
+    <Filter Include="LuaScript">
+      <UniqueIdentifier>{09e381be-fcdf-4216-8a96-719ad4e0ac8b}</UniqueIdentifier>
+    </Filter>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="main.cpp">
@@ -21,22 +24,36 @@
     <ClCompile Include="Darwin.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
+    <ClCompile Include="ManageInputOutput.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="Genome.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="Population.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="NeuralNetwork.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
-    <ClInclude Include="HelperFuncs.h">
-      <Filter>Source Files</Filter>
-    </ClInclude>
     <ClInclude Include="Darwin.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="Genome.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="HelperFuncs.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="NeuralNetwork.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="Population.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="ManageInputOutput.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="LuaScript\InputOutput.lua">
+      <Filter>LuaScript</Filter>
+    </None>
+    <None Include="LuaScript\Megaman X.lua">
+      <Filter>LuaScript</Filter>
+    </None>
   </ItemGroup>
 </Project>

@@ -19,24 +19,7 @@ select = false,
 }
 
 -- dPad
-buttonInput[1] = false -- up
-buttonInput[2] = false -- down
-buttonInput[3] = false -- left
-buttonInput[4] = false -- right
 
--- face buttons
-buttonInput[5] = false -- b
-buttonInput[6] = false -- a
-buttonInput[7] = false -- y
-buttonInput[8] = false -- x
-
---shoulder buttons
-buttonInput[9] = false -- leftShoulder
-buttonInput[10] = false -- rightShoulder
-
--- utility buttons
-buttonInput[11] = false -- start
-buttonInput[12] = false -- select
 local buttonAmount = 12
 joypadString = {}
 joypadString[1] = "Up"
@@ -54,25 +37,21 @@ joypadString[10] = "R"
 
 joypadString[11] = "Start"
 joypadString[12] = "Select"
-results = {}
+results = {1,2,5,56,65,432,2}
+
 local i = 1
 inputRequestGranted = false
 resultRequestGranted = false
-function SetInputCPP(startIndex, boolean)
-
-	for i=startIndex, buttonAmount 
-	do
-		buttonInput[i] = boolean
-	end
+function SetInputCPP(index, boolean)
 
 	i = index
 	buttonInput[index] = boolean
 	if buttonInput[index] == true 
 	then
-		print("[LUA: InputOutput SetInputCPP: buttonInput left is true\n")
+		print("[LUA: InputOutput SetInputCPP: buttonInput["..index.. "] is true\n")
 		
 	else
-		print("[LUA: InputOutput temp: buttonInput is false\n")
+		print("[LUA: InputOutput temp: buttonInput["..index.. "] is false\n")
 		print(buttonInput.left)
 		
 	end

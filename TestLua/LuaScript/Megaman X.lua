@@ -109,14 +109,14 @@ memory.usememorydomain("CARTROM")
 
 
 output = {}
-output.enemyPosition = {}
-output.enemyPosition.x = 0
-output.enemyPosition.y = 0
+--output.enemyPosition = {}
+output.enemyPositionX = 0
+output.enemyPositionY = 0
 output.currentLevel = 0
 output.megamanState = 0
 output.megamanBitflags = 0
-output.tile = {}
-output.tile.direction = 0
+--output.tile = {}
+output.tileDirection = 0
 output.distanceFromStartPosition = 0
 
 
@@ -203,8 +203,8 @@ local function enemies()
 			xrad = memory.read_u8(boxpointer + 2)
 			yrad = memory.read_u8(boxpointer + 3)
 			
-			output.enemyPosition.x = x
-			output.enemyposition.y = y
+			output.enemyPositionX = x
+			output.EnemyPositionY = y
 		
 		if facing > 0x45 then
 				xoff = xoff * -1

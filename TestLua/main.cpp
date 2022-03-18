@@ -2,7 +2,7 @@
 #include <mlpack/core.hpp>
 #include "HelperFuncs.h"
 #include "Darwin.h"
-
+#include "ManageInputOutput.h"
 int main()
 {
 	srand((unsigned)M_PI * time(NULL));
@@ -49,7 +49,7 @@ int main()
 	
 	
 	//-------------------------------------------------------------------
-
+	ManageInputOutput* inputOutput = new ManageInputOutput();
 
 
 	Darwin* d = new Darwin();
@@ -59,6 +59,9 @@ int main()
 	d->InitPopulation(populationSize, topology);
 	//d->ByMutation(d->activePopulations[0]);
 	d->ByCrossover(d->activePopulations[0], d->activePopulations[12]);
+	inputOutput->SetButtonInput(genePerPop);
+	delete inputOutput;
+	inputOutput = nullptr;
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 
