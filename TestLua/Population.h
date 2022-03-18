@@ -12,7 +12,7 @@ enum E_Selection : int
 struct Population
 {
 public:
-
+	//int generation;
 	float maxFitness;
 	float minFitness;
 	float avgFitness;

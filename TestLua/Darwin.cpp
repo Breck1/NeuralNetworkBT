@@ -25,8 +25,6 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 
 		g.value = hf->GetRandomNumber(i);
 		genePerPop.push_back(g);
-
-
 	}
 	return genePerPop;
 }
@@ -72,10 +70,8 @@ std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 
 #pragma region population methods
 
-void Darwin::InitPopulation(int popSize, int topology)
+void Darwin::InitPopulation(int popSize)
 {
-	for(int i = 0; i < popSize; i++)
-	{
 		Population p;
 		p.mutMax = 0.5f;
 		p.mutRate = 0.2f;
@@ -83,12 +79,10 @@ void Darwin::InitPopulation(int popSize, int topology)
 		p.crossRate = 0.7f;
 
 		p.selection = E_Selection::roulette;
-		p.name = "abc " + i;
-		p.genes = InitGenes(topology);
+		p.name = "";
+		p.genes = InitGenes(popSize);
 
-		activePopulations.push_back(p);
-
-	}
+		activePopulation = p;
 }
 
 Gene Darwin::SelectGenome(Population pop)
@@ -182,18 +176,12 @@ void Darwin::EvolvePopulation(Population elites)
 
 
 #pragma region gettersNsetters
-std::vector<Population> Darwin::GetActivePopulations()
+Population Darwin::GetActivePopulation()
 {
-	return activePopulations;
+	return activePopulation;
 }
-Population Darwin::GetActivePopulation(int index)
-{
-	return activePopulations[index];
-}
-int Darwin::GetActivePopulationSize()
-{
-	return activePopulations.size();
-}
+
+
 int Darwin::GetGeneration()
 {
 	return generations;

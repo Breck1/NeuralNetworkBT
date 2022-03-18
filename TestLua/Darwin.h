@@ -11,7 +11,7 @@
 class Darwin
 {
 public:
-	std::vector<Population> activePopulations;
+	Population activePopulation;
 	Darwin();
 	~Darwin();
 #pragma region genome methods
@@ -24,7 +24,7 @@ public:
 
 #pragma region population methods
 
-	void InitPopulation(int popSize, int topology);
+	void InitPopulation(int popSize);
 	Gene SelectGenome(Population pop);
 	void RecalculatePopulationFitness(Population pop); //klar 
 	void EvolvePopulation(Population elites);
@@ -32,9 +32,7 @@ public:
 
 #pragma region get genomes
 
-    std::vector<Population>GetActivePopulations();
-    Population GetActivePopulation(int index);
-    int GetActivePopulationSize();
+    Population GetActivePopulation();
     int GetGeneration();
 	std::string GetGenerationString(Population pop);
 	Gene GetBestGenome(Population pop);
