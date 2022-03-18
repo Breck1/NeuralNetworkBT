@@ -25,7 +25,7 @@ public:
 #pragma region population methods
 
 	void InitPopulation(int popSize, int topology);
-	std::vector<Gene> SelectGenome(Population pop);
+	Gene SelectGenome(Population pop);
 	void RecalculatePopulationFitness(Population pop); //klar 
 	void EvolvePopulation(Population elites);
 #pragma endregion
