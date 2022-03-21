@@ -3,7 +3,7 @@
 #include "Darwin.h"
 
 #pragma region lmao globals
-
+//struct it up
 const float MOVEMENT_TIMEOUT = 1;
 const float PROGRESS_TIMEOUT = 1;
 
