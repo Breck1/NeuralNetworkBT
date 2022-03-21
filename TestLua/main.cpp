@@ -48,7 +48,8 @@ int globalFitnessScore = 0;
 #pragma endregion
 
 Darwin* d = new Darwin();
-
+void CompleteTest();
+void InitNewTest();
 int main()
 {
 	srand((unsigned)M_PI * time(NULL));

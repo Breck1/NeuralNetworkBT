@@ -1,12 +1,12 @@
 #pragma once
-
+#include <vector>
 
 struct Gene
 {
 public:
 	float fitness;
 	int index;
-	float value;
+	std::vector<float> weight;
 }; 
 
 

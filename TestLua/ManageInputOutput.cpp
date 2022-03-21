@@ -31,8 +31,10 @@ void ManageInputOutput::SetButtonInput(std::vector<Gene> geneOutput)
 	int genomeSize = geneOutput.size();
 	emulatorInput.resize(genomeSize);
 	for (int i = 0; i < genomeSize; i++)
-		emulatorInput[i] = geneOutput[i].value > 0.5f;
-	
+	{
+		for (int j= 0; j < geneOutput[i].weight.size(); j++)
+			emulatorInput[i] = geneOutput[i].weight[j] > 0.5f;
+	}
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
 	

@@ -15,6 +15,7 @@ Darwin::~Darwin()
 
 std::vector<Gene> Darwin::InitGenes(int topology)
 {
+	std::vector<int> layers = { 0, 0, 0, 0 };
 	std::vector<Gene> genePerPop;
 	float rrandomNum = hf->GetRandomNumber();
 	for(size_t i = 0; i < topology; i++)
@@ -23,8 +24,12 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 		g.fitness = 0;
 		g.index = i;
 
-		g.value = hf->GetRandomNumber(i);
-		genePerPop.push_back(g);
+		for (int j = 0; j < hf->GetNumWeights(layers); j++) // fix with proper vector.
+		{
+			g.weight.push_back(hf->GetRandomNumber(j));
+			genePerPop.push_back(g);
+		}
+
 	}
 	return genePerPop;
 }
@@ -36,12 +41,16 @@ std::vector<Gene> Darwin::ByMutation(Population source)
 	{
 		if(hf->GetRandomNumber(i) < source.mutRate)
 		{
-			gene[i].value += hf->GetRandomNumber() * source.mutMax;
-			gene[i].value -= hf->GetRandomNumber(i) * source.mutMax;
+			for (int j = 0; j < gene[i].weight.size(); j++)
+			{
+				gene[i].weight[j] += hf->GetRandomNumber() * source.mutMax;
+				gene[i].weight[j] -= hf->GetRandomNumber(i) * source.mutMax;
 
-			//clamp value
-			gene[i].value > 1 ? 1 : gene[i].value;
-			gene[i].value < -1 ? -1 : gene[i].value;
+				//clamp value
+				gene[i].weight[j] > 1 ? 1 : gene[i].weight[j];
+				gene[i].weight[j] < -1 ? -1 : gene[i].weight[j];
+
+			}
 		}
 	}
 
