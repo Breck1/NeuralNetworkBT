@@ -5,8 +5,8 @@
 buttonInput = {}
 
 tileStart = 0x0300
-tileFinish = 0x04FF 
-enemyStart = 0x0E68 -- 3688 
+tileFinish = 0x04FF
+enemyStart = 0x0E68 -- 3688
 enemyFinish = 0x1228 -- 4648
 -- DPad input
 buttonInput.left = false;
@@ -64,7 +64,7 @@ local ym
 
 -- Breakpoints not yet implemented in bizhawk
 -- local function draw_instabox(base)
-	
+
 	-- local camx = mainmemory.read_u16_le(cx)
 	-- local camy = mainmemory.read_u16_le(cy)
 	-- local facing = mainmemory.read_u8(base + 0x11)
@@ -75,11 +75,11 @@ local ym
 	-- local yoff = mainmemory.read_s8(boxpointer + 1)
 	-- local xrad = mainmemory.read_u8(boxpointer + 2)
 	-- local yrad = mainmemory.read_u8(boxpointer + 3)
-	
+
 	-- if facing > 0x45 then
 		-- xoff = xoff * -1
 	-- end
-	
+
 	-- gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,0xFFFF0000,0x05FF0000)
 -- end
 
@@ -90,7 +90,7 @@ end
 
 function MegamnPositionX()
 print("[LUA EnemyPositionY called \n")
-	
+
 	return megamanPosX
 end
 function MegamanPositionY()
@@ -105,7 +105,7 @@ print("[LUA EnemyPositionY called \n")
 end
 
 
-memory.usememorydomain("CARTROM") 
+memory.usememorydomain("CARTROM")
 
 
 output = {}
@@ -144,13 +144,13 @@ local function megaman()
 	if facing > 0x45 then
 		xoff = xoff * -1
 	end
-	
+
 	gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,0xFF0000FF,0x400000FF)
 end
 
 local function enemies()
 
-	local x 
+	local x
 	local xoff
 	local xrad
 	local y
@@ -163,53 +163,53 @@ local function enemies()
 	local facing
 	local fill
 	local outl
-	local start = 0xE68
+	local start = 0xE68 --3688
 	local oend = 32
-	
+
 	for i = 0, oend,1 do
-	
-		base = start + (i * 0x40)
-		
+
+		base = start + (i * 0x40) -- 3688 + (i * 64) || läser en fiende i taget
+
 		if i == 0 then
 			base = start
 		end
-		
-		if mainmemory.read_u8(base) ~= 0 then
-			
+
+		if mainmemory.read_u8(base) ~= 0 then -- om minnet inte är laddat så finns de inte.
+
 			if i > 14 and i < 21 then
 				if draw_projectiles == true then
-					fill = 0x40FFFFFF
-					outl = 0xFFFFFFFF
+					fill = 0x40FFFFFF -- vitt
+					outl = 0xFFFFFFFF -- egna skott
 				else
-					fill = 0x00000000
-					outl = 0x00000000
+					fill = 0x00000000 -- svart
+					outl = 0x00000000 -- gör ingenting
 				end
 			else
-				fill = 0x40FF0000
-				outl = 0xFFFF0000
-			end	
-			
-			if i > 21 then
-				fill = 0x40FFFF00
-				outl = 0xFFFFFF00
+				fill = 0x40FF0000 -- red
+				outl = 0xFFFF0000 -- super bad enemies
 			end
-			
+
+			if i > 21 then
+				fill = 0x40FFFF00 -- Gul = bad
+				outl = 0xFFFFFF00 -- skott och drops
+			end
+
 			facing = mainmemory.read_u8(base + 0x11)
-			x = mainmemory.read_u16_le(base + 5) - camx
+			x = mainmemory.read_u16_le(base + 5) - camx -- unsigned 2 byte value
 			y = mainmemory.read_u16_le(base + 8) - camy
 			boxpointer = mainmemory.read_u16_le(base +0x20) + 0x28000
 			xoff = memory.read_s8(boxpointer + 0)
 			yoff = memory.read_s8(boxpointer + 1)
 			xrad = memory.read_u8(boxpointer + 2)
 			yrad = memory.read_u8(boxpointer + 3)
-			
+
 			output.enemyPositionX = x
 			output.EnemyPositionY = y
-		
+
 		if facing > 0x45 then
 				xoff = xoff * -1
 		end
-		
+
 		--Breakpoints not yet implemented in Bizhawk
 		-- if draw_instantbox == true then
 			-- memory.registerwrite(0x7E0000 + base + 0x20,2,function ()
@@ -217,10 +217,10 @@ local function enemies()
 			-- end)
 		-- end
 
-		
+
 		--gui.text(x,y,string.format("%X",base))  -- Debug
-		gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)	
-			
+		gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)
+
 			if draw_hpvalues == true and mainmemory.read_u8(base+0x27) > 0 then
 				if i < 15 or i > 20 then
 					gui.text((x-5) * xm,(y-5) * ym,"HP: " .. mainmemory.read_u8(base+0x27))
@@ -234,28 +234,28 @@ end
 local function scaler()
 	xm = client.screenwidth() / 256
 	ym = client.screenheight() / 224
-end	
+end
 dofile("InputOutput.lua")
 
 getInput = {}
 getJoypadString = {}
 
 local function SetJoypadInput()
-	if RequestInput() 
+	if RequestInput()
 	then
 		getInput = GetInput()
 		getJoypadString = GetJoypadStrings()
 
 		local buttonsPressed = {}
-		for i = 1, 12 
+		for i = 1, 12
 		do
             buttonsPressed[getJoypadString[i]] = getInput[i]
-			if getInput[i] == true 
-			then 
+			if getInput[i] == true
+			then
 				--output.buttonPressDuraton[i] = emu.framecount()
 				gui.text(2, 64 + i * 8, string.upper(getJoypadString[i]))
 			end
-			--else 
+			--else
 			--output.buttonPressDuraton[i] = emu.framecount() - output.buttonPressDuraton[i]
 			--end
 
@@ -268,7 +268,7 @@ end
 function PopulateTable()
 end
 
-function SendData()	
+function SendData()
 end
 
 while true do
@@ -277,13 +277,13 @@ while true do
 		megaman()
 		SetJoypadInput()
 		SetResults(output)
-		-- SetJoypadInput()	
+		-- SetJoypadInput()
 		-- print("megaman Position X: " .. megamanPosX)
 		-- print("megaman Position Y: " .. megamanPosY)
 	end
 	if draw_enemies == true then
 	enemySpotted = draw_enemies
-	
+
 		enemies()
 	end
 	emu.frameadvance()
