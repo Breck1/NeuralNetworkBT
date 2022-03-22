@@ -1,4 +1,5 @@
 #include <iostream>
+#include <fstream>
 #include "HelperFuncs.h"
 #include "Darwin.h"
 
@@ -52,21 +53,21 @@ void CompleteTest();
 void InitNewTest();
 int main()
 {
-	srand((unsigned)M_PI * time(NULL));
+	srand((unsigned)3 * time(NULL));
 
 
 	//-------------------------------------------------------------------
-
-
 
 	HelperFuncs* h = new HelperFuncs;
 
 	int topology = h->GetNumWeights(layers); // weights
 	d->InitPopulation(populationSize);
-	//d->ByMutation(d->activePopulations[0]);
-	//d->ByCrossover(d->activePopulations[0], d->activePopulations[12]);
+	//d->LoadPopulation(3);
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
+
+
+
 
 	/*
 	InitNewTest();
@@ -77,8 +78,8 @@ int main()
 		//lua emu. frameadvance
 	}
 	*/
-	
 
+	
 
 	return 0;
 }
