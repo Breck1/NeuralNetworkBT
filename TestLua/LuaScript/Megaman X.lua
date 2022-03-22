@@ -118,12 +118,24 @@ output.currentLevel = 0
 output.megamanState = 0
 output.megamanBitflags = 0
 --output.tile = {}
+output.MX = 0
+output.MY = 0
 output.tileDirection = 0
-output.distanceFromStartPosition = 0
+output.deathPositionX = 0
 
+completeTest = {}
 
+completeTest.startMX = 0;
+completeTest.startMY = 0;
+completeTest.MX = 0;
+completeTest.MY = 0;
+
+local megamanFalling = 8
+local hasStarted = false;
+local dead = false
 local function megaman()
 
+	
 	local camx = mainmemory.read_u16_le(cx)
 	local camy = mainmemory.read_u16_le(cy)
 	local x = mainmemory.read_u16_le(px) - camx
@@ -134,15 +146,36 @@ local function megaman()
 	local yoff = memory.read_s8(boxpointer + 1)
 	local xrad = memory.read_u8(boxpointer + 2)
 	local yrad = memory.read_u8(boxpointer + 3)
-
+	local megamanHealthAddress = 0x0BCF
+	
+	local health = mainmemory.read_u8(megamanHealthAddress)
 	output.currentLevel = memory.read_s8(currentLevelData)
 
 	output.megamanState = memory.read_s8(stateAddress)
 	output.megamanBitflags = memory.read_s8(bitflags)
 	--print("Camera Pos X: " ..camx)
 	--print("Camera Pos Y: " ..camy)
-	megamanPosX = x + camx
-	megamanPosY = y + camy
+		megamanPosX = x + camx
+		megamanPosY = y + camy		
+	if hasStarted ~= true
+	then
+		completeTest.startMX = megamanPosX
+		completeTest.startMY = megamanPosY
+		hasStarted = true
+	end
+
+	if mainmemory.read_u8(stateAddress) ~= megamanFalling 
+	then
+		output.MX = megamanPosX
+		output.MY = megamanPosY
+	end
+	if health <= 0
+	then
+		completeTest.MX = output.MX
+		completeTest.MY = output.MY
+		hasStarted = false
+		dead = true
+	end	
 	if facing > 0x45 then
 		xoff = xoff * -1
 	end
@@ -183,8 +216,8 @@ local function enemies()
 					fill = 0x40FFFFFF -- vitt
 					outl = 0xFFFFFFFF -- egna skott
 				else
-					fill = 0x00000000 -- svart
-					outl = 0x00000000 -- gör ingenting
+					fill = 0x40000000 -- svart
+					outl = 0xFF000000 -- gör ingenting
 				end
 			else
 				fill = 0x40FF0000 -- red
@@ -207,13 +240,13 @@ local function enemies()
 
 			output.enemyPositionX = x
 			output.EnemyPositionY = y
-<<<<<<< HEAD
-			print(x)
-			print(y)
+--<<<<<<< HEAD
+			--print(x)
+			--print(y)
 		
-=======
+--=======
 
->>>>>>> main
+-->>>>>>main
 		if facing > 0x45 then
 				xoff = xoff * -1
 		end
@@ -239,51 +272,74 @@ local function enemies()
 	end
 end
 function tileData()
-for i = 0, oend,1 do
-	
-		base = start + (i * tileStart)
+
+	local tileTest = 0x2420
+	local x
+	local xoff
+	local xtestoff
+	local xrad
+	local xtestrad
+	local y
+	local yoff
+	local ytestoff
+	local yrad
+	local ytestrad
+	local camx = mainmemory.read_u16_le(cx)
+	local camy = mainmemory.read_u16_le(cy)
+	local base
+	local boxpointer
+	local facing
+	local fill
+	local outl
+	local start = 0x0300 --3688
+	local oend = 64    
+
+--for i = 0 ,  oend,1 do
+	--base = start + (i * tileStart)
 		
-		if i == 0 then
+		--if i == 0 then
 			base = start
-		end
+		--end
 		
-		if mainmemory.read_u8(base) ~= 0 then
+		--if mainmemory.read_u8(base) ~= 0 then
 			
-			if i > 14 and i < 21 then
-				if draw_projectiles == true then
-					fill = 0x40FFFFFF
-					outl = 0xFFFFFFFF
-					else
-						fill = 0x00000000
-						outl = 0x00000000
-				end
-			else
-				fill = 0x40FF0000
-				outl = 0xFFFF0000
-			end	
+			--if i > 0 and i < 64 then
+				--if draw_projectiles == true then
+					--fill = 0x40FFFFFF
+					--outl = 0xFFFFFFFF
+					--else
+						--fill = 0x00000000
+						--outl = 0x00000000
+				--end
+			--else
+				--fill = 0x40F10000
+				--outl = 0xFF1F0000
+			--end	
 			
-			if i > 21 then
-				fill = 0x40FFFF00
-				outl = 0xFFFFFF00
-			end
+			--if i > 21 then
+				--fill = 0x403FFF00
+				--outl = 0xFF3FFF00
+			--end
 			
-			facing = mainmemory.read_u8(base + 0x11)
+			--facing = mainmemory.read_u8(base + 0x11)
 			x = mainmemory.read_u16_le(base + 5) - camx
 			y = mainmemory.read_u16_le(base + 8) - camy
 			boxpointer = mainmemory.read_u16_le(base +0x20) + 0x28000
-			xoff = memory.read_s8(boxpointer + 0)
-			yoff = memory.read_s8(boxpointer + 1)
-			xrad = memory.read_u8(boxpointer + 2)
-			yrad = memory.read_u8(boxpointer + 3)
+
+			--xoff = memory.read_s8(boxpointer + 0)
+			--yoff = memory.read_s8(boxpointer + 1)
+			--xrad = memory.read_u8(boxpointer + 2)
+			--yrad = memory.read_u8(boxpointer + 3)
 			
-			output.enemyPositionX = x
-			output.EnemyPositionY = y
-			print(x)
-			print(y)
+
+			--output.enemyPositionX = x
+			--output.EnemyPositionY = y
+			--print(x)
+			--print(y)
 		
-		if facing > 0x45 then
-				xoff = xoff * -1
-		end
+		--if facing > 0x45 then
+				--xoff = xoff * -1
+		--end
 		
 		--Breakpoints not yet implemented in Bizhawk
 		-- if draw_instantbox == true then
@@ -291,19 +347,31 @@ for i = 0, oend,1 do
 				-- draw_instabox(memory.getregister("D"))
 			-- end)
 		-- end
-
-		
-		--gui.text(x,y,string.format("%X",base))  -- Debug
-		gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)	
-			
-			if draw_hpvalues == true and mainmemory.read_u8(base+0x27) > 0 then
-				if i < 15 or i > 20 then
-					gui.text((x-5) * xm,(y-5) * ym,"HP: " .. mainmemory.read_u8(base+0x27))
-				end
+			fill = 0x40000000 -- svart
+			outl = 0xFF000000 -- gör ingenting
+			for i = 0, 0x028, 1 do
+			testPointer = memory.read_u16_le(tileTest + i);
+			print("for loop i value: " ..i)
+			print("TestPointer: "..testPointer)
 			end
 
-		end
-	end
+			xtestoff = memory.read_s8(testPointer + 0)
+			ytestoff = memory.read_s8(testPointer + 1)
+			xtestrad = memory.read_u8(testPointer + 2)
+			ytestrad = memory.read_u8(testPointer + 3)
+		gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
+		
+		--gui.text(x,y,string.format("%X",base))  -- Debug
+		--gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)	
+			
+			--if draw_hpvalues == true and mainmemory.read_u8(base+0x27) > 0 then
+				--if i < 15 or i > 20 then
+					--gui.text((x-5) * xm,(y-5) * ym,"HP: " .. mainmemory.read_u8(base+0x27))
+				--end
+			--end
+
+		--end
+	--end
 end
 local function scaler()
 	xm = client.screenwidth() / 256
@@ -351,9 +419,15 @@ while true do
 		megaman()
 		SetJoypadInput()
 		SetResults(output)
+		if dead
+		then
+			SetOnDeath(completeTest)
+		dead = false;
+		-- tileData()
 		-- SetJoypadInput()
 		-- print("megaman Position X: " .. megamanPosX)
 		-- print("megaman Position Y: " .. megamanPosY)
+		end
 	end
 	if draw_enemies == true then
 	enemySpotted = draw_enemies

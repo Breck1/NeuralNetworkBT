@@ -18,8 +18,8 @@ start = false,
 select = false,
 }
 
+resultOnDeath = {}
 -- dPad
-
 local buttonAmount = 12
 joypadString = {}
 joypadString[1] = "Up"
@@ -37,11 +37,12 @@ joypadString[10] = "R"
 
 joypadString[11] = "Start"
 joypadString[12] = "Select"
-results = {1,2,5,56,65,432,2}
+results = {0, 0, 0, 0, 0, 0, 0}
 
 local i = 1
 inputRequestGranted = false
 resultRequestGranted = false
+
 function SetInputCPP(index, boolean)
 
 	i = index
@@ -58,9 +59,11 @@ function SetInputCPP(index, boolean)
 	inputRequestGranted = true
 	return
 end
+
 function RequestInput()
 	return inputRequestGranted 
 end
+
 function GetInput()
 	if inputRequestGranted == true
 	then
@@ -71,17 +74,26 @@ end
 function GetJoypadStrings()
 	return joypadString
 end
+
 function SetResults(resultsTable)
 	results = resultsTable	
 	resultRequestGranted = true
 end
+
 function RequestResults()
 	return resultRequestGranted
 end
+
 function GetResults()
 	if resultRequestGranted == true
 	then
 		resultRequestGranted = false
 	end
 	return results 
+end
+function GetDeathTable()
+	return resultOnDeath
+end
+function SetOnDeath(deathTable)
+	resultOnDeath = deathTable
 end
