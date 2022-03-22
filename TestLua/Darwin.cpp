@@ -17,21 +17,44 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 {
 	std::vector<int> layers = { 0, 0, 0, 0 };
 	std::vector<Gene> genePerPop;
-	float rrandomNum = hf->GetRandomNumber();
+
 	for(size_t i = 0; i < topology; i++)
 	{
 		Gene g;
 		g.fitness = 0;
 		g.index = i;
 
-		for (int j = 0; j < hf->GetNumWeights(layers); j++) // fix with proper vector.
+		for(int j = 0; j < hf->GetNumWeights(layers); j++) // fix with proper vector.
 		{
 			g.weight.push_back(hf->GetRandomNumber(j));
 			genePerPop.push_back(g);
+			std::cout << g.weight[j] << " lmao" << std::endl;
 		}
+		hf->Save("ReadWriteTest.txt", g.weight);
 
 	}
 	return genePerPop;
+}
+
+std::vector<Gene> Darwin::LoadGenes(int topology)
+{
+	std::vector<int> layers = { 0, 0, 0, 0 };
+	std::vector<Gene> genePerPop;
+
+	for(size_t i = 0; i < topology; i++)
+	{
+		Gene g;
+		g.fitness = 0;
+		g.index = i;
+		//läs varje rad typ
+		g.weight = hf->Load("ReadWriteTest.txt", g.weight);
+
+		for(size_t i = 0; i < g.weight.size(); i++)
+		{
+			std::cout << i << " " << g.weight[i] << std::endl;
+		}
+	}
+	return std::vector<Gene>();
 }
 
 std::vector<Gene> Darwin::ByMutation(Population source)
@@ -41,7 +64,7 @@ std::vector<Gene> Darwin::ByMutation(Population source)
 	{
 		if(hf->GetRandomNumber(i) < source.mutRate)
 		{
-			for (int j = 0; j < gene[i].weight.size(); j++)
+			for(int j = 0; j < gene[i].weight.size(); j++)
 			{
 				gene[i].weight[j] += hf->GetRandomNumber() * source.mutMax;
 				gene[i].weight[j] -= hf->GetRandomNumber(i) * source.mutMax;
@@ -81,17 +104,32 @@ std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 
 void Darwin::InitPopulation(int popSize)
 {
-		Population p;
-		p.mutMax = 0.5f;
-		p.mutRate = 0.2f;
-		p.numElites = 2;
-		p.crossRate = 0.7f;
+	Population p;
+	p.mutMax = 0.5f;
+	p.mutRate = 0.2f;
+	p.numElites = 2;
+	p.crossRate = 0.7f;
 
-		p.selection = E_Selection::roulette;
-		p.name = "";
-		p.genes = InitGenes(popSize);
+	p.selection = E_Selection::roulette; //rand 1-2 ??
+	p.name = "";
+	p.genes = InitGenes(popSize);
 
-		activePopulation = p;
+	activePopulation = p;
+}
+
+void Darwin::LoadPopulation(int popSize)
+{
+	Population p;
+	p.mutMax = 0.5f;
+	p.mutRate = 0.2f;
+	p.numElites = 2;
+	p.crossRate = 0.7f;
+
+	p.selection = E_Selection::roulette; //rand 1-2 ??
+	p.name = "";
+	p.genes = LoadGenes(popSize);
+
+	activePopulation = p;
 }
 
 Gene Darwin::SelectGenome(Population pop)

@@ -3,6 +3,7 @@
 #include <cmath>
 #include <time.h>
 #include <iostream>
+#include <string>
 #include "Population.h"
 #include "Genome.h"
 #include "NeuralNetwork.h"
@@ -19,6 +20,7 @@ public:
 #pragma region genome methods
 
 	std::vector<Gene> InitGenes(int topology);
+	std::vector<Gene> LoadGenes(int topology);
 	std::vector<Gene> ByMutation(Population source);
 	std::vector<Gene> ByCrossover(Population mother, Population father);
 
@@ -27,6 +29,7 @@ public:
 #pragma region population methods
 
 	void InitPopulation(int popSize);
+	void LoadPopulation(int popSize);
 	Gene SelectGenome(Population pop);
 	void RecalculatePopulationFitness(Population pop); //klar 
 	void EvolvePopulation(Population elites);

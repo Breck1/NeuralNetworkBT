@@ -169,6 +169,9 @@
     <None Include="LuaScript\InputOutput.lua" />
     <None Include="LuaScript\Megaman X.lua" />
   </ItemGroup>
+  <ItemGroup>
+    <Text Include="ReadWriteTest.txt" />
+  </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
   </ImportGroup>
