@@ -54,26 +54,32 @@ public:
 	}
 
 
-	std::vector<float> Load(std::string path, std::vector<float> weights)
+	std::vector<Gene> Load(std::string path, std::vector<Gene> genes)
 	{
 		//Fixa så den läser varje rad
 		std::ifstream file(path);
 		std::string line;
-
+		genes.resize(3);
+		int i = 0;
 		while(std::getline(file, line))
 		{
 			float value;
+			
 			std::stringstream ss(line);
+			
+				for (size_t j = 0; j < 420; j++)
+				{
+					ss >> value;
+					genes[i].weight.push_back(value);
+					std::cout << j << " " << genes[i].weight[j] << std::endl;
 
-			for(int i = 0; i < line.size(); i++)
-			{
-				ss >> value;
-				weights.push_back(value);
-			}
+				}
+				i++;
+			
 		}
 
 
-		return weights;
+		return genes;
 	}
 
 };

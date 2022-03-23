@@ -48,14 +48,14 @@ std::vector<Gene> Darwin::LoadGenes(int topology)
 		g.fitness = 0;
 		g.index = i;
 		//läs varje rad typ
-		g.weight = hf->Load("ReadWriteTest.txt", g.weight);
 
 		for(size_t j = 0; j < g.weight.size(); j++)
 		{
 			std::cout << j << " " << g.weight[j] << std::endl;
 		}
 	}
-	return std::vector<Gene>();
+	genePerPop = hf->Load("ReadWriteTest.txt", genePerPop);
+	return genePerPop;
 }
 
 std::vector<Gene> Darwin::ByMutation(Population source)
