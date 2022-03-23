@@ -50,9 +50,9 @@ std::vector<Gene> Darwin::LoadGenes(int topology)
 		//läs varje rad typ
 		g.weight = hf->Load("ReadWriteTest.txt", g.weight);
 
-		for(size_t i = 0; i < g.weight.size(); i++)
+		for(size_t j = 0; j < g.weight.size(); j++)
 		{
-			std::cout << i << " " << g.weight[i] << std::endl;
+			std::cout << j << " " << g.weight[j] << std::endl;
 		}
 	}
 	return std::vector<Gene>();

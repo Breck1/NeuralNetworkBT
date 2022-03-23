@@ -1,6 +1,7 @@
 #pragma once
 #include <vector>
 #include <fstream>
+#include <sstream>
 #include "Genome.h"
 class HelperFuncs
 {
@@ -38,17 +39,17 @@ public:
 
 		if(!file.is_open())
 			return;
-		
+
 		for(size_t i = 0; i < genes.size(); i++)
 		{
-			for (size_t j = 0; j < genes[i].weight.size(); j++)
+			for(size_t j = 0; j < genes[i].weight.size(); j++)
 			{
 				file << genes[i].weight[j] << " ";
 
 			}
 			file << std::endl;
 		}
-		
+
 		file.close();
 	}
 
@@ -57,12 +58,21 @@ public:
 	{
 		//Fixa så den läser varje rad
 		std::ifstream file(path);
+		std::string line;
 
-		float value;
-		while(file >> value) // returns file
+		while(std::getline(file, line))
 		{
-			weights.push_back(value);
+			float value;
+			std::stringstream ss(line);
+
+			for(int i = 0; i < line.size(); i++)
+			{
+				ss >> value;
+				weights.push_back(value);
+			}
 		}
+
+
 		return weights;
 	}
 
