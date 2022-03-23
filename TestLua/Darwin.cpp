@@ -29,17 +29,17 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 			g.weight.push_back(hf->GetRandomNumber(j));
 			//std::cout << g.weight[j] << " lmao" << std::endl;
 		}
-			genePerPop.push_back(g);
+		genePerPop.push_back(g);
 
 	}
-	
+
 	hf->Save("ReadWriteTest.txt", genePerPop);
 	return genePerPop;
 }
 
 std::vector<Gene> Darwin::LoadGenes(int topology)
 {
-	std::vector<int> layers = { 0, 0, 0, 0 };
+	std::vector<int> layers = { 8, 12, 12, 12 };
 	std::vector<Gene> genePerPop;
 
 	for(size_t i = 0; i < topology; i++)
@@ -47,14 +47,8 @@ std::vector<Gene> Darwin::LoadGenes(int topology)
 		Gene g;
 		g.fitness = 0;
 		g.index = i;
-		//läs varje rad typ
-
-		for(size_t j = 0; j < g.weight.size(); j++)
-		{
-			std::cout << j << " " << g.weight[j] << std::endl;
-		}
 	}
-	genePerPop = hf->Load("ReadWriteTest.txt", genePerPop);
+	genePerPop = hf->Load("ReadWriteTest.txt", genePerPop, hf->GetNumWeights(layers));
 	return genePerPop;
 }
 

@@ -61,8 +61,8 @@ int main()
 	HelperFuncs* h = new HelperFuncs;
 
 	int topology = h->GetNumWeights(layers); // weights
-	//d->InitPopulation(3);
-	d->LoadPopulation(3);
+	//d->InitPopulation(populationSize);
+	d->LoadPopulation(populationSize);
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 

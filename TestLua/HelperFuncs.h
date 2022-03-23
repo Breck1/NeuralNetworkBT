@@ -54,12 +54,12 @@ public:
 	}
 
 
-	std::vector<Gene> Load(std::string path, std::vector<Gene> genes)
+	std::vector<Gene> Load(std::string path, std::vector<Gene> genes, int size)
 	{
 		//Fixa så den läser varje rad
 		std::ifstream file(path);
 		std::string line;
-		genes.resize(3);
+		genes.resize(size);
 		int i = 0;
 		while(std::getline(file, line))
 		{
