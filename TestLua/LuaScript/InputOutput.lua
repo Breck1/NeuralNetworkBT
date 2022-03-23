@@ -94,6 +94,3 @@ end
 function GetDeathTable()
 	return resultOnDeath
 end
-function SetOnDeath(deathTable)
-	resultOnDeath = deathTable
-end

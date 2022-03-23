@@ -114,24 +114,20 @@ output = {}
 --output.enemyPosition = {}
 output.enemyPositionX = 0
 output.enemyPositionY = 0
+output.megamanHealth = 0
 output.currentLevel = 0
 output.megamanState = 0
 output.megamanBitflags = 0
 --output.tile = {}
 output.MX = 0
 output.MY = 0
-output.tileDirection = 0
+--output.tileDirection = 0
 output.deathPositionX = 0
 
-completeTest = {}
 
-completeTest.startMX = 0;
-completeTest.startMY = 0;
-completeTest.MX = 0;
-completeTest.MY = 0;
 
 local megamanFalling = 8
-local hasStarted = false;
+
 local dead = false
 local function megaman()
 
@@ -157,25 +153,14 @@ local function megaman()
 	--print("Camera Pos Y: " ..camy)
 		megamanPosX = x + camx
 		megamanPosY = y + camy		
-	if hasStarted ~= true
-	then
-		completeTest.startMX = megamanPosX
-		completeTest.startMY = megamanPosY
-		hasStarted = true
-	end
+		
+		output.megamanHealth = health
 
 	if mainmemory.read_u8(stateAddress) ~= megamanFalling 
 	then
 		output.MX = megamanPosX
 		output.MY = megamanPosY
 	end
-	if health <= 0
-	then
-		completeTest.MX = output.MX
-		completeTest.MY = output.MY
-		hasStarted = false
-		dead = true
-	end	
 	if facing > 0x45 then
 		xoff = xoff * -1
 	end
@@ -419,15 +404,6 @@ while true do
 		megaman()
 		SetJoypadInput()
 		SetResults(output)
-		if dead
-		then
-			SetOnDeath(completeTest)
-		dead = false;
-		-- tileData()
-		-- SetJoypadInput()
-		-- print("megaman Position X: " .. megamanPosX)
-		-- print("megaman Position Y: " .. megamanPosY)
-		end
 	end
 	if draw_enemies == true then
 	enemySpotted = draw_enemies

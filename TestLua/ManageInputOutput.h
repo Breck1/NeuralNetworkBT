@@ -16,7 +16,7 @@ struct EmulatorOutput
 
 	float megamanState = 0;
 	float megamanBitflags = 0;
-	float tileDirection = 0;
+	//float tileDirection = 0;
 
 	float distanceFromStartPosition = 0;
 };
