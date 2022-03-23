@@ -1,7 +1,7 @@
 #pragma once
 #include <vector>
 #include <fstream>
-
+#include "Genome.h"
 class HelperFuncs
 {
 
@@ -31,7 +31,7 @@ public:
 
 	}
 
-	void Save(std::string name, std::vector<float> weights)
+	void Save(std::string name, std::vector<Gene> genes)
 	{
 		std::ofstream file(name);
 
@@ -39,9 +39,14 @@ public:
 		if(!file.is_open())
 			return;
 		
-		for(size_t i = 0; i < weights.size(); i++)
+		for(size_t i = 0; i < genes.size(); i++)
 		{
-			file << weights[i] << std::endl;
+			for (size_t j = 0; j < genes[i].weight.size(); j++)
+			{
+				file << genes[i].weight[j] << " ";
+
+			}
+			file << std::endl;
 		}
 		
 		file.close();

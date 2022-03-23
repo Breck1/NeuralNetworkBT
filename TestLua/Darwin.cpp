@@ -15,7 +15,7 @@ Darwin::~Darwin()
 
 std::vector<Gene> Darwin::InitGenes(int topology)
 {
-	std::vector<int> layers = { 0, 0, 0, 0 };
+	std::vector<int> layers = { 8, 12, 12, 12 };
 	std::vector<Gene> genePerPop;
 
 	for(size_t i = 0; i < topology; i++)
@@ -27,12 +27,13 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 		for(int j = 0; j < hf->GetNumWeights(layers); j++) // fix with proper vector.
 		{
 			g.weight.push_back(hf->GetRandomNumber(j));
-			genePerPop.push_back(g);
-			std::cout << g.weight[j] << " lmao" << std::endl;
+			//std::cout << g.weight[j] << " lmao" << std::endl;
 		}
-		hf->Save("ReadWriteTest.txt", g.weight);
+			genePerPop.push_back(g);
 
 	}
+	
+	hf->Save("ReadWriteTest.txt", genePerPop);
 	return genePerPop;
 }
 
