@@ -27,7 +27,6 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 		for(int j = 0; j < hf->GetNumWeights(layers); j++) // fix with proper vector.
 		{
 			g.weight.push_back(hf->GetRandomNumber(j));
-			//std::cout << g.weight[j] << " lmao" << std::endl;
 		}
 		genePerPop.push_back(g);
 
