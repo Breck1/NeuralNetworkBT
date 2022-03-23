@@ -2,6 +2,7 @@
 #include <fstream>
 #include "HelperFuncs.h"
 #include "Darwin.h"
+#include "ManageInputOutput.h"
 
 #pragma region lmao globals
 //struct it up
@@ -23,6 +24,7 @@ std::vector<int> numOutputs; // = 14 -- buttons
 std::vector<int> layers{ 8, 12 , 12 , 12 }; // input - x - x - outputs
 std::vector<int> numWeights;
 
+std::vector<float> randomTest;
 int currentPopulation;
 int currentSaveStateIndex = 1;
 int currentStateIndex;
@@ -49,6 +51,9 @@ int globalFitnessScore = 0;
 #pragma endregion
 
 Darwin* d = new Darwin();
+HelperFuncs* h = new HelperFuncs;
+ManageInputOutput* m = new ManageInputOutput;
+
 void CompleteTest();
 void InitNewTest();
 int main()
@@ -58,7 +63,6 @@ int main()
 
 	//-------------------------------------------------------------------
 
-	HelperFuncs* h = new HelperFuncs;
 
 	int topology = h->GetNumWeights(layers); // weights
 	//d->InitPopulation(populationSize);
@@ -79,7 +83,7 @@ int main()
 	}
 	*/
 
-	
+
 
 	return 0;
 }
@@ -91,13 +95,29 @@ void Update()
 
 	/*
 	106 - 121 IN LUA PROJECT
-	mx, my = getMegaManPos;
+	MX = m->GetEmulatorOutput()[2];
+	MY = m->GetEmulatorOutput()[3];
 
 	Gör inputs = std::vector<float>inputs;
 	skicka till NN
 	set joystick
 	lessgo
 	*/
+	//----------------------------------------------
+	
+
+	//TESTING
+	//----------------------------------------------
+
+	
+	for(int i = 0; i < 12; i++)
+	{
+		randomTest.push_back(h->GetRandomNumber());
+	}
+
+
+	h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest);
+
 
 	//----------------------------------------------
 	totalFrames++;
@@ -167,6 +187,16 @@ void InitNewTest()
 		}
 		d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 		//TODO Lägg in NN här
+
+		//--------------------------------- Random nummer för test
+		for(int i = 0; i < 12; i++)
+		{
+			randomTest.push_back(h->GetRandomNumber());
+		}
+
+
+		h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest);
+		//---------------------------------
 		currentStateIndex = 1;
 	}
 	else
@@ -174,7 +204,9 @@ void InitNewTest()
 		currentStateIndex++;
 	}
 
-	//mx, my = getMegamanPos
+
+	MX = m->GetEmulatorOutput()[2];
+	MY = m->GetEmulatorOutput()[3];
 	lastMX = MX;
 	lastMY = MY;
 	maxMX = MX;
@@ -185,8 +217,6 @@ void InitNewTest()
 	totalFrames = 0;
 	lastMovementCounter = 0;
 	lastProgressCounter = 0;
-
-
 
 }
 #pragma endregion

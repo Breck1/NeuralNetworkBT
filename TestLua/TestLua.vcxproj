@@ -162,7 +162,6 @@
     <ClInclude Include="Genome.h" />
     <ClInclude Include="HelperFuncs.h" />
     <ClInclude Include="ManageInputOutput.h" />
-    <ClInclude Include="NeuralNetwork.h" />
     <ClInclude Include="Population.h" />
   </ItemGroup>
   <ItemGroup>

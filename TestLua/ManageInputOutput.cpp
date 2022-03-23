@@ -21,9 +21,9 @@ void ManageInputOutput::SetEmulatorResults()
 
 }
 
-EmulatorOutput ManageInputOutput::GetEmulatorOutput()
+std::vector<float> ManageInputOutput::GetEmulatorOutput()
 {
-	return emulatorOutput;
+	return getOutput;
 }
 
 void ManageInputOutput::SetButtonInput(std::vector<Gene> geneOutput)
