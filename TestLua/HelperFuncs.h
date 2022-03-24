@@ -89,14 +89,14 @@ public:
 		int weightIndex = 0;
 
 		activations = inputs;
-		nextActivations.resize(activations.size());
+		nextActivations;  //.resize(activations.size());
 
 		for(int i = 0; i < layers - 1; i++)
 		{
 			for(int j = 0; j < layers + 1; j++)
 			{
 				//set neuron activation to bias value
-				nextActivations[j] = weights[j].weight[weightIndex];
+				nextActivations.push_back(weights[j].weight[weightIndex]);
 				weightIndex++;
 
 				for(int k = 0; k < layers; k++)

@@ -25,7 +25,7 @@ class ManageInputOutput
 public:
 	void SetEmulatorResults();
 	std::vector<float> GetEmulatorOutput();
-	void SetButtonInput(std::vector<class Gene> geneOutput);
+	void SetButtonInput(std::vector<float> geneOutput);
 private:
 	bool CheckLua(lua_State* L, int r);
 

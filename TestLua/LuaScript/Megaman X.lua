@@ -2,7 +2,7 @@
 
 ---------------
 ----GLOBALS----
-buttonInput = {}
+--buttonInput = {}
 
 tileStart = 0x0300
 tileFinish = 0x04FF
@@ -11,20 +11,20 @@ enemyFinish = 0x1228 -- 4648
 
 bulletsOnScreen = 0x08BB
 -- DPad input
-buttonInput.left = false;
-buttonInput.right = false;
-buttonInput.up = false;
-buttonInput.down = false;
+--buttonInput.left = false;
+--buttonInput.right = false;
+--buttonInput.up = false;
+--buttonInput.down = false;
 
 -- actionButton input
-buttonInput.b = false;
-buttonInput.a = false;
-buttonInput.y = false;
-buttonInput.x = false;
+--buttonInput.b = false;
+--buttonInput.a = false;
+--buttonInput.y = false;
+--buttonInput.x = false;
 
 -- shoulder button input
-buttonInput.l = false;
-buttonInput.r = false;
+--buttonInput.l = false;
+--buttonInput.r = false;
 ---------------
 enemySpotted = true
 
@@ -363,7 +363,7 @@ local function scaler()
 	ym = client.screenheight() / 224
 end
 dofile("InputOutput.lua")
-
+require "InputOutput"
 getInput = {}
 getJoypadString = {}
 
@@ -377,11 +377,11 @@ local function SetJoypadInput()
 		for i = 1, 12
 		do
             buttonsPressed[getJoypadString[i]] = getInput[i]
-			if getInput[i] == true
-			then
+			--if getInput[i] == true
+			--then
 				--output.buttonPressDuraton[i] = emu.framecount()
 				gui.text(2, 64 + i * 8, string.upper(getJoypadString[i]))
-			end
+			--end
 			--else
 			--output.buttonPressDuraton[i] = emu.framecount() - output.buttonPressDuraton[i]
 			--end
@@ -402,6 +402,7 @@ while true do
 	scaler()
 	if draw_megaman == true then
 		megaman()
+		
 		SetJoypadInput()
 		SetResults(output)
 	end

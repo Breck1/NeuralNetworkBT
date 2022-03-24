@@ -26,19 +26,20 @@ std::vector<float> ManageInputOutput::GetEmulatorOutput()
 	return getOutput;
 }
 
-void ManageInputOutput::SetButtonInput(std::vector<Gene> geneOutput)
+void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 {
 	int genomeSize = geneOutput.size();
 	emulatorInput.resize(genomeSize);
 	for (int i = 0; i < genomeSize; i++)
 	{
-		for (int j= 0; j < geneOutput[i].weight.size(); j++)
-			emulatorInput[i] = geneOutput[i].weight[j] > 0.5f;
+		for (int j = 0; j < geneOutput.size(); j++)
+			emulatorInput[i] = geneOutput[j] > 0.5f;
 	}
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
-	
+
 	if (CheckLua(L, luaL_dofile(L, "LuaScript/InputOutput.lua")))
+
 	{		
 		luaL_openlibs(L);
 		for (int i = 0; i < genomeSize; i++)

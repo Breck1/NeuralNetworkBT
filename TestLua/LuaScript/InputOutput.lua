@@ -65,10 +65,10 @@ function RequestInput()
 end
 
 function GetInput()
-	if inputRequestGranted == true
-	then
-		inputRequestGranted = false
-	end
+	--if inputRequestGranted == true
+	--then
+		--inputRequestGranted = false
+	--end
 	return buttonInput
 end
 function GetJoypadStrings()

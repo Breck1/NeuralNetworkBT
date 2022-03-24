@@ -85,8 +85,7 @@ void Update()
 	}
 
 
-	h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest);
-
+	m->SetButtonInput(h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest));
 	MX = m->GetEmulatorOutput()[2];
 	MY = m->GetEmulatorOutput()[3];
 	//----------------------------------------------
@@ -128,12 +127,15 @@ void Update()
 void CompleteTest() //klar
 {
 	float fitness = maxMX - startMX;
+	if (currentGenomeIndex < d->activePopulation.genes.size())
 
 	d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
 
 	if(currentSaveStateIndex == savestates)
 	{
-		globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
+
+		if (currentGenomeIndex < d->activePopulation.genes.size())
+			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
 
 	InitNewTest();
@@ -155,6 +157,7 @@ void InitNewTest()
 		{
 			currentGenomeIndex++;
 		}
+		if(currentGenomeIndex < d->activePopulation.genes.size())
 		d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 		//TODO Lägg in NN här
 
@@ -202,9 +205,9 @@ int main()
 	d->InitPopulation(populationSize);
 	//d->LoadPopulation(populationSize);
 	InitNewTest();
-	Update();
 	while(true) //update until you lose or stand still too long
 	{
+	Update();
 		//lua emu. frameadvance
 	}
 	delete d;
