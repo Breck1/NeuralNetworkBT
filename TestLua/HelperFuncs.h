@@ -5,9 +5,9 @@
 #include "Genome.h"
 class HelperFuncs
 {
+	std::vector<float> megamanValues;
 
 public:
-
 	int GetNumWeights(std::vector<int> topology)
 	{
 		int num = 0;
@@ -61,28 +61,28 @@ public:
 		std::string line;
 		genes.resize(size);
 		int i = 0;
-		while(std::getline(file, line))
-		{
-			float value;
-			
-			std::stringstream ss(line);
-			
-				for (size_t j = 0; j < 420; j++)
-				{
-					ss >> value;
-					genes[i].weight.push_back(value);
-					std::cout << j << " " << genes[i].weight[j] << std::endl;
+		//while(std::getline(file, line))
+		//{
+		//	float value;
+		//	
+		//	std::stringstream ss(line);
+		//	
+		//		for (size_t j = 0; j < 420; j++)
+		//		{
+		//			ss >> value;
 
-				}
-				i++;
-			
-		}
+		//			genes[i].weight.push_back(value);
+		//			std::cout << j << " " << genes[i].weight[j] << std::endl;
 
+		//		}
+		//		i++;
+		//	
+		//}
 
 		return genes;
 	}
 
-	std::vector<float> GenerateOutputs(int layers, std::vector<Gene> weights, std::vector<float> inputs)
+	std::vector<float> GenerateOutputs(std::vector<int> layers, std::vector<Gene> weights, std::vector<float> inputs)
 	{
 		std::vector<float> activations;
 		std::vector<float> nextActivations;
@@ -91,18 +91,18 @@ public:
 		activations = inputs;
 		nextActivations;  //.resize(activations.size());
 
-		for(int i = 0; i < layers - 1; i++)
+		for(int i = 0; i < layers.size() - 1; i++)
 		{
-			for(int j = 0; j < layers + 1; j++)
+			for(int j = 0; j < layers[i + 1]; j++)
 			{
 				//set neuron activation to bias value
 				nextActivations.push_back(weights[j].weight[weightIndex]);
 				weightIndex++;
 
-				for(int k = 0; k < layers; k++)
+				for(int k = 0; k < layers[i]; k++)
 				{
 					//add inputs * weight 
-					nextActivations[j] = nextActivations[j] + weights[j].weight[weightIndex] * activations[k];
+					nextActivations[j] = weights[j].weight[weightIndex] * activations[k];
 					weightIndex++;
 				}
 
@@ -116,4 +116,38 @@ public:
 		return activations;
 	}
 
+
+
+	std::vector<float> SetMegamanXOutput()
+	{
+		std::vector<float> megamanXoutput;
+		std::ifstream readLuaFile("LuaScript/MegamanStatus.txt");
+		std::string luaLine;
+		int k= 0;
+		while (std::getline(readLuaFile, luaLine))
+		{
+			float value;
+
+			std::stringstream ss(luaLine);
+
+			for (size_t j = 0; j < 8; j++)
+			{
+				ss >> value;
+				std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;
+				megamanXoutput.push_back(value);
+				//std::cout << j << " " << genes[k].weight[j] << std::endl;
+
+			}
+
+			k++;
+
+		}
+		megamanValues = megamanXoutput;
+		return megamanXoutput;
+
+	}
+	std::vector<float> GetMegamanXOutput()
+	{
+		return megamanValues;
+	}
 };

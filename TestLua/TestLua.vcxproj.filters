@@ -52,8 +52,11 @@
     <None Include="LuaScript\Megaman X.lua">
       <Filter>LuaScript</Filter>
     </None>
+    <None Include="LuaScript\superMarioBot.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadWriteTest.txt" />
+    <Text Include="LuaScript\MegamanStatus.txt" />
+    <Text Include="LuaScript\ButtonInput.txt" />
   </ItemGroup>
 </Project>

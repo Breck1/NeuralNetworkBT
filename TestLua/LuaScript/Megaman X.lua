@@ -123,7 +123,9 @@ output.MX = 0
 output.MY = 0
 --output.tileDirection = 0
 output.deathPositionX = 0
-
+function output.GetOutput()
+return self.MX
+end
 
 
 local megamanFalling = 8
@@ -164,7 +166,19 @@ local function megaman()
 	if facing > 0x45 then
 		xoff = xoff * -1
 	end
-
+local file = io.open( "MegamanStatus.txt", "w" )
+if file ~= nil
+then
+file:write( output.enemyPositionX.."\n")
+file:write( output.enemyPositionY.."\n")
+file:write( output.MX.."\n")
+file:write( output.MY.."\n")
+file:write( output.megamanHealth.."\n")
+file:write( output.currentLevel.."\n")
+file:write( output.megamanState.."\n")
+file:write( output.megamanBitflags.."\n")
+file:close()
+end
 	gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,0xFF0000FF,0x400000FF)
 end
 
@@ -363,19 +377,60 @@ local function scaler()
 	ym = client.screenheight() / 224
 end
 dofile("InputOutput.lua")
-require "InputOutput"
-getInput = {}
+--require "InputOutput"
+getInput = {
+left = false,
+right = false,
+up = false,
+down = false,
+
+b = false,
+a = false,
+y = false,
+x = false,
+
+l = false,
+r = false,
+
+start = false,
+select = false,
+}
 getJoypadString = {}
 
 local function SetJoypadInput()
-	if RequestInput()
-	then
-		getInput = GetInput()
+	--if RequestInput()
+	--then
+
+local lines = {}
+local files = io.open( "ButtonInput.txt", "rb" )
+if files ~= nil
+then
+for line in io.lines("ButtonInput.txt", "rb" ) 
+do
+lines[#lines + 1] = line
+
+end
+
+
+files:close()
+end
+	
+	for i=1,12 do
+	--print(getInput)
+end
+
 		getJoypadString = GetJoypadStrings()
 
 		local buttonsPressed = {}
 		for i = 1, 12
 		do
+		if lines[i] == "1"
+		then
+
+		getInput[i] = true
+		end
+		print(getInput[i])
+		print(lines[i])
             buttonsPressed[getJoypadString[i]] = getInput[i]
 			--if getInput[i] == true
 			--then
@@ -388,7 +443,7 @@ local function SetJoypadInput()
 
 		end
 		joypad.set(buttonsPressed, 1)
-    end
+    --end
 end
 
 

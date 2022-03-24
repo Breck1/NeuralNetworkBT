@@ -85,9 +85,10 @@ void Update()
 	}
 
 
-	m->SetButtonInput(h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest));
+	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, randomTest));
 	MX = m->GetEmulatorOutput()[2];
 	MY = m->GetEmulatorOutput()[3];
+	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
 	totalFrames++;
 
@@ -168,7 +169,7 @@ void InitNewTest()
 		}
 
 
-		h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest);
+		h->GenerateOutputs(layers, d->activePopulation.genes, randomTest);
 		//---------------------------------
 		currentStateIndex = 1;
 	}

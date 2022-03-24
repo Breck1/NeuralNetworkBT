@@ -1,5 +1,4 @@
 
-
 buttonInput = {
 left = false,
 right = false,
@@ -44,16 +43,23 @@ inputRequestGranted = false
 resultRequestGranted = false
 
 function SetInputCPP(index, boolean)
-
 	i = index
+	input = 0
 	buttonInput[index] = boolean
 	if buttonInput[index] == true 
 	then
+		input = 1
+	local files = io.open("ButtonInput.txt", "w")
+	files:write(input.."\n")
+	files:close()
 		print("[LUA: InputOutput SetInputCPP: buttonInput["..index.. "] is true\n")
 		
 	else
 		print("[LUA: InputOutput temp: buttonInput["..index.. "] is false\n")
-		print(buttonInput.left)
+		input = 0
+		local files = io.open("ButtonInput.txt", "w")
+		files:write(input.."\n")
+		files:close()
 		
 	end
 	inputRequestGranted = true
@@ -64,12 +70,13 @@ function RequestInput()
 	return inputRequestGranted 
 end
 
-function GetInput()
+function GetInput(index)
 	--if inputRequestGranted == true
 	--then
 		--inputRequestGranted = false
 	--end
-	return buttonInput
+
+	return buttonInput[index]
 end
 function GetJoypadStrings()
 	return joypadString
@@ -85,10 +92,6 @@ function RequestResults()
 end
 
 function GetResults()
-	if resultRequestGranted == true
-	then
-		resultRequestGranted = false
-	end
 	return results 
 end
 function GetDeathTable()

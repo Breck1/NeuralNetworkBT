@@ -1,5 +1,6 @@
 #include "ManageInputOutput.h"
-
+#include <fstream>
+#include <sstream>
 #include <stdlib.h>
 
 #ifdef _WIN64
@@ -28,12 +29,20 @@ std::vector<float> ManageInputOutput::GetEmulatorOutput()
 
 void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 {
+	std::ofstream file("LuaScript/ButtonInput.txt");
+	std::string line;
 	int genomeSize = geneOutput.size();
 	emulatorInput.resize(genomeSize);
 	for (int i = 0; i < genomeSize; i++)
 	{
-		for (int j = 0; j < geneOutput.size(); j++)
-			emulatorInput[i] = geneOutput[j] > 0.5f;
+
+			if (geneOutput[i] > 0.5f)
+				file << 1 << std::endl;
+			else
+				file << 0 << std::endl;	
+			emulatorInput[i] = geneOutput[i] > 0.6f;
+			std::cout << "geneOutput i: " << geneOutput[i] << std::endl;
+		
 	}
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
@@ -68,7 +77,7 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 			
 			getOutput[index] = luaL_checknumber(L, -1);
 			lua_pop(L, 1);
-
+			std::cout << getOutput[index] << std::endl;
 		}
 		lua_close(L);
 

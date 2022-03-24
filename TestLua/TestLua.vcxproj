@@ -167,8 +167,11 @@
   <ItemGroup>
     <None Include="LuaScript\InputOutput.lua" />
     <None Include="LuaScript\Megaman X.lua" />
+    <None Include="LuaScript\superMarioBot.lua" />
   </ItemGroup>
   <ItemGroup>
+    <Text Include="LuaScript\ButtonInput.txt" />
+    <Text Include="LuaScript\MegamanStatus.txt" />
     <Text Include="ReadWriteTest.txt" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
