@@ -56,37 +56,7 @@ ManageInputOutput* m = new ManageInputOutput;
 
 void CompleteTest();
 void InitNewTest();
-int main()
-{
-	srand((unsigned)3 * time(NULL));
 
-
-	//-------------------------------------------------------------------
-
-
-	int topology = h->GetNumWeights(layers); // weights
-	//d->InitPopulation(populationSize);
-	d->LoadPopulation(populationSize);
-	delete d;
-	d = nullptr; //TODO cleaner klass ??
-
-
-
-
-	/*
-	InitNewTest();
-	while(true) //update until you lose or stand still too long
-	{
-		Update();
-
-		//lua emu. frameadvance
-	}
-	*/
-
-
-
-	return 0;
-}
 
 #pragma region loop
 void Update()
@@ -95,8 +65,7 @@ void Update()
 
 	/*
 	106 - 121 IN LUA PROJECT
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
+
 
 	Gör inputs = std::vector<float>inputs;
 	skicka till NN
@@ -104,12 +73,12 @@ void Update()
 	lessgo
 	*/
 	//----------------------------------------------
-	
+
 
 	//TESTING
 	//----------------------------------------------
 
-	
+
 	for(int i = 0; i < 12; i++)
 	{
 		randomTest.push_back(h->GetRandomNumber());
@@ -118,7 +87,8 @@ void Update()
 
 	h->GenerateOutputs(layers.size(), d->activePopulation.genes, randomTest);
 
-
+	MX = m->GetEmulatorOutput()[2];
+	MY = m->GetEmulatorOutput()[3];
 	//----------------------------------------------
 	totalFrames++;
 
@@ -221,4 +191,23 @@ void InitNewTest()
 }
 #pragma endregion
 
+int main()
+{
+	srand((unsigned)3 * time(NULL));
 
+
+	//-------------------------------------------------------------------
+
+	int topology = h->GetNumWeights(layers); // weights
+	d->InitPopulation(populationSize);
+	//d->LoadPopulation(populationSize);
+	InitNewTest();
+	Update();
+	while(true) //update until you lose or stand still too long
+	{
+		//lua emu. frameadvance
+	}
+	delete d;
+	d = nullptr; //TODO cleaner klass ??
+	return 0;
+}
