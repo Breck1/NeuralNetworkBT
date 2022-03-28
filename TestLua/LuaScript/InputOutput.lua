@@ -36,7 +36,7 @@ joypadString[10] = "R"
 
 joypadString[11] = "Start"
 joypadString[12] = "Select"
-results = {0, 0, 0, 0, 0, 0, 0}
+--results = {0, 0, 0, 0, 0, 0, 0}
 
 local i = 1
 inputRequestGranted = false
@@ -82,10 +82,10 @@ function GetJoypadStrings()
 	return joypadString
 end
 
-function SetResults(resultsTable)
-	results = resultsTable	
-	resultRequestGranted = true
-end
+--function SetResults(resultsTable)
+--	results = resultsTable	
+--	resultRequestGranted = true
+--end
 
 function RequestResults()
 	return resultRequestGranted

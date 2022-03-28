@@ -165,6 +165,7 @@
     <ClInclude Include="Population.h" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="LuaScript\buttonInputTester.lua" />
     <None Include="LuaScript\InputOutput.lua" />
     <None Include="LuaScript\Megaman X.lua" />
     <None Include="LuaScript\superMarioBot.lua" />

@@ -53,6 +53,7 @@
       <Filter>LuaScript</Filter>
     </None>
     <None Include="LuaScript\superMarioBot.lua" />
+    <None Include="LuaScript\buttonInputTester.lua" />
   </ItemGroup>
   <ItemGroup>
     <Text Include="ReadWriteTest.txt" />

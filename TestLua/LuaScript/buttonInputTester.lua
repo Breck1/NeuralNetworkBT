@@ -38,11 +38,12 @@ function ButtonInput2.new(resultSize)
         return results
     end
 
-    function SetResults(resultsTable)
+    function self.SetResults(resultsTable)
+        --print("resultsTable")
         results = resultsTable
+        print("results")
         return results
     end
-
 
     return self
 

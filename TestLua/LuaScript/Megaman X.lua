@@ -1,8 +1,9 @@
 --Author Pasky13
-
 ---------------
 ----GLOBALS----
 --buttonInput = {}
+
+require "buttonInputTester"
 
 tileStart = 0x0300
 tileFinish = 0x04FF
@@ -63,6 +64,7 @@ local draw_projectiles = true
 
 local xm
 local ym
+
 
 -- Breakpoints not yet implemented in bizhawk
 -- local function draw_instabox(base)
@@ -133,7 +135,7 @@ local megamanFalling = 8
 local dead = false
 local function megaman()
 
-	
+
 	local camx = mainmemory.read_u16_le(cx)
 	local camy = mainmemory.read_u16_le(cy)
 	local x = mainmemory.read_u16_le(px) - camx
@@ -145,7 +147,7 @@ local function megaman()
 	local xrad = memory.read_u8(boxpointer + 2)
 	local yrad = memory.read_u8(boxpointer + 3)
 	local megamanHealthAddress = 0x0BCF
-	
+
 	local health = mainmemory.read_u8(megamanHealthAddress)
 	output.currentLevel = memory.read_s8(currentLevelData)
 
@@ -154,11 +156,11 @@ local function megaman()
 	--print("Camera Pos X: " ..camx)
 	--print("Camera Pos Y: " ..camy)
 		megamanPosX = x + camx
-		megamanPosY = y + camy		
-		
+		megamanPosY = y + camy
+
 		output.megamanHealth = health
 
-	if mainmemory.read_u8(stateAddress) ~= megamanFalling 
+	if mainmemory.read_u8(stateAddress) ~= megamanFalling
 	then
 		output.MX = megamanPosX
 		output.MY = megamanPosY
@@ -242,7 +244,7 @@ local function enemies()
 --<<<<<<< HEAD
 			--print(x)
 			--print(y)
-		
+
 --=======
 
 -->>>>>>main
@@ -291,17 +293,17 @@ function tileData()
 	local fill
 	local outl
 	local start = 0x0300 --3688
-	local oend = 64    
+	local oend = 64
 
 --for i = 0 ,  oend,1 do
 	--base = start + (i * tileStart)
-		
+
 		--if i == 0 then
 			base = start
 		--end
-		
+
 		--if mainmemory.read_u8(base) ~= 0 then
-			
+
 			--if i > 0 and i < 64 then
 				--if draw_projectiles == true then
 					--fill = 0x40FFFFFF
@@ -313,13 +315,13 @@ function tileData()
 			--else
 				--fill = 0x40F10000
 				--outl = 0xFF1F0000
-			--end	
-			
+			--end
+
 			--if i > 21 then
 				--fill = 0x403FFF00
 				--outl = 0xFF3FFF00
 			--end
-			
+
 			--facing = mainmemory.read_u8(base + 0x11)
 			x = mainmemory.read_u16_le(base + 5) - camx
 			y = mainmemory.read_u16_le(base + 8) - camy
@@ -329,17 +331,17 @@ function tileData()
 			--yoff = memory.read_s8(boxpointer + 1)
 			--xrad = memory.read_u8(boxpointer + 2)
 			--yrad = memory.read_u8(boxpointer + 3)
-			
+
 
 			--output.enemyPositionX = x
 			--output.EnemyPositionY = y
 			--print(x)
 			--print(y)
-		
+
 		--if facing > 0x45 then
 				--xoff = xoff * -1
 		--end
-		
+
 		--Breakpoints not yet implemented in Bizhawk
 		-- if draw_instantbox == true then
 			-- memory.registerwrite(0x7E0000 + base + 0x20,2,function ()
@@ -359,10 +361,10 @@ function tileData()
 			xtestrad = memory.read_u8(testPointer + 2)
 			ytestrad = memory.read_u8(testPointer + 3)
 		gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
-		
+
 		--gui.text(x,y,string.format("%X",base))  -- Debug
-		--gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)	
-			
+		--gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,outl, fill)
+
 			--if draw_hpvalues == true and mainmemory.read_u8(base+0x27) > 0 then
 				--if i < 15 or i > 20 then
 					--gui.text((x-5) * xm,(y-5) * ym,"HP: " .. mainmemory.read_u8(base+0x27))
@@ -376,9 +378,10 @@ local function scaler()
 	xm = client.screenwidth() / 256
 	ym = client.screenheight() / 224
 end
-dofile("InputOutput.lua")
+dofile("buttonInputTester.lua")
 --require "InputOutput"
-getInput = {
+getInput =
+{
 left = false,
 right = false,
 up = false,
@@ -405,7 +408,7 @@ local lines = {}
 local files = io.open( "ButtonInput.txt", "rb" )
 if files ~= nil
 then
-for line in io.lines("ButtonInput.txt", "rb" ) 
+for line in io.lines("ButtonInput.txt", "rb" )
 do
 lines[#lines + 1] = line
 
@@ -414,7 +417,7 @@ end
 
 files:close()
 end
-	
+
 	for i=1,12 do
 	--print(getInput)
 end
@@ -453,13 +456,15 @@ end
 function SendData()
 end
 
+local binput2 = ButtonInput2.new(12)
+
 while true do
 	scaler()
 	if draw_megaman == true then
 		megaman()
-		
-		SetJoypadInput()
-		SetResults(output)
+		--SetJoypadInput()
+		binput2:SetResults(output)
+--		SetResults(output)
 	end
 	if draw_enemies == true then
 	enemySpotted = draw_enemies
