@@ -18,6 +18,7 @@ public:
 		a = b;
 		b = temp;
 	}
+
 	int GetNumWeights(std::vector<int> topology)
 	{
 		int num = 0;
@@ -35,6 +36,7 @@ public:
 		return (float)rand() / RAND_MAX;
 
 	}
+	
 	float GetRandomNumber()
 	{
 		return (float)rand() / RAND_MAX;
@@ -44,18 +46,17 @@ public:
 	{
 		return (int)rand() / RAND_MAX;
 	}
+	
 	int GetRandomIntNumber(int max, int min)
 	{
 		return (int)rand() % (max - min + 1) + min;
 	}
-
 	
 	E_Selection GetRandomSelection()
 	{
 		E_Selection val = static_cast<E_Selection>(GetRandomIntNumber(2, 1));
 		return val;
 	}
-	
 
 	void Save(std::string name, std::vector<Gene> genes)
 	{
@@ -77,7 +78,6 @@ public:
 
 		file.close();
 	}
-
 
 	std::vector<Gene> Load(std::string path, std::vector<Gene> genes, int size)
 	{
@@ -141,8 +141,6 @@ public:
 		return activations;
 	}
 
-
-
 	std::vector<float> SetMegamanXOutput()
 	{
 		std::vector<float> megamanXoutput;
@@ -171,9 +169,25 @@ public:
 		return megamanXoutput;
 
 	}
+
 	std::vector<float> GetMegamanXOutput()
 	{
 		return megamanValues;
+	}
+
+	std::vector<Gene> SortGenes(std::vector<Gene>& genes)
+	{
+		if(genes.size() == 0)
+			return std::vector<Gene>();
+
+		Gene gene = genes.front();
+
+		int i, j;
+		for(i = 0; i < genes.size() - 1; i++)
+			for(j = 0; j < genes.size() - i - 1; j++)
+				if(genes[j].weight < genes[j + 1].weight)
+					Swap(genes[j], genes[j + 1]);
+		return genes;
 	}
 };
 

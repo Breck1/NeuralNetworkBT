@@ -1,5 +1,6 @@
 #include "Darwin.h"
-#include <algorithm>
+#include <iostream>
+#include <string>
 
 Darwin::Darwin()
 {
@@ -120,6 +121,7 @@ void Darwin::LoadPopulation(int popSize)
 	p.numElites = 2;
 	p.crossRate = 0.7f;
 
+	
 	p.selection = hf->GetRandomSelection();
 	p.name = "";
 	p.genes = LoadGenes(popSize);
@@ -153,6 +155,7 @@ Gene Darwin::SelectGenome(Population pop)
 		{
 			selectedGenome.push_back(pop.genes[hf->GetRandomNumber(i)]);
 		}
+		hf->SortGenes(selectedGenome); //Otestat
 	}
 	return selectedGenome.back();
 }
@@ -175,6 +178,8 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 	pop.avgFitness = pop.totalFitness / pop.genes.size();
 	pop.maxFitness = tempMaxFit;
 	pop.minFitness = tempMinFit;
+	hf->SortGenes(pop.genes); //Otestat
+	
 }
 
 void Darwin::EvolvePopulation(Population elites)

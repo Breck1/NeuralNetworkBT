@@ -55,8 +55,7 @@ HelperFuncs* h = new HelperFuncs;
 ManageInputOutput* m = new ManageInputOutput;
 
 void CompleteTest();
-void InitNewTest();
-
+void InitNextTest();
 
 #pragma region loop
 void Update()
@@ -137,10 +136,10 @@ void CompleteTest() //klar
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
 	
-	InitNewTest();
+	InitNextTest();
 }
 
-void InitNewTest()
+void InitNextTest()
 {
 
 	if(currentSaveStateIndex >= savestates)
@@ -158,9 +157,10 @@ void InitNewTest()
 		}
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
-		//TODO Lägg in NN här
 
+		/* 
 		//--------------------------------- Random nummer för test
+		Ganska säker på att detta är balony och inte bhr va här
 		for(int i = 0; i < 12; i++)
 		{
 			randomTest.push_back(h->GetRandomNumber());
@@ -169,6 +169,8 @@ void InitNewTest()
 
 		h->GenerateOutputs(layers, d->activePopulation.genes, randomTest);
 		//---------------------------------
+		*/
+		
 		currentStateIndex = 1;
 	}
 	else
@@ -204,7 +206,7 @@ int main()
 	d->InitPopulation(populationSize);
 
 	//d->LoadPopulation(populationSize);
-	//InitNewTest();
+	InitNextTest();
 	/*
 	while(true) //update until you lose or stand still too long
 	{
