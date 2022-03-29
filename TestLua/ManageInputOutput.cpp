@@ -51,8 +51,7 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 	lua_State* L = luaL_newstate();
 	luaL_openlibs(L);
 
-	if(CheckLua(L, luaL_dofile(L, "LuaScript/buttonInputTester.lua")))
-
+	if(CheckLua(L, luaL_dofile(L, "LuaScript/Megaman X.lua")))
 	{
 		luaL_openlibs(L);
 		for(int i = 0; i < genomeSize; i++)
@@ -65,7 +64,7 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 			CheckLua(L, lua_pcall(L, 2, 1, 0));
 
 		}
-		lua_getglobal(L, "ButtonInput2");
+		lua_getglobal(L, "output");
 
 
 
@@ -86,6 +85,4 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 		lua_close(L);
 
 	}
-
-
 }

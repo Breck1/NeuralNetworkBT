@@ -207,13 +207,13 @@ int main()
 
 	//d->LoadPopulation(populationSize);
 	InitNextTest();
-	/*
+	
 	while(true) //update until you lose or stand still too long
 	{
-	Update();
+		Update();
 		//lua emu. frameadvance
 	}
-	*/
+	
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 	return 0;
