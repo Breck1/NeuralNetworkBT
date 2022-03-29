@@ -8,7 +8,7 @@ function ButtonInput2.new(resultSize)
     local self = {}
 
 
-    self.left = false
+    self.left = true
     self.right = false
     self.up = false
     self.down = false
@@ -41,8 +41,8 @@ function ButtonInput2.new(resultSize)
     function self.SetResults(resultsTable)
         --print("resultsTable")
         results = resultsTable
-        print("results")
-        return results
+        print(self.left)
+        return self.left
     end
 
     return self

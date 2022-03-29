@@ -39,7 +39,7 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 	for(int i = 0; i < genomeSize; i++)
 	{
 
-		if(geneOutput[i] > 0.5f)
+		if(geneOutput[i] > 0.6f)
 			file << 1 << std::endl;
 		else
 			file << 0 << std::endl;

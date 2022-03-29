@@ -151,3 +151,15 @@ public:
 		return megamanValues;
 	}
 };
+
+// Megaman State, 6 = rising, 8 = falling 14 = dashing 2 = walking
+// megamanBitflags, 4 = Standing, 2 = hanging on left wall, 1 = hanging on right wall
+/*
+output.enemyPositionX
+output.enemyPositionY
+output.MX
+output.MY
+output.megamanHealth
+output.megamanState
+output.megamanBitflags
+*/

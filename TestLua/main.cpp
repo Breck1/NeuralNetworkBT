@@ -138,7 +138,7 @@ void CompleteTest() //klar
 		if (currentGenomeIndex < d->activePopulation.genes.size())
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
-
+	
 	InitNewTest();
 }
 
