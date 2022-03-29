@@ -1,4 +1,5 @@
 #include "Darwin.h"
+#include <algorithm>
 
 Darwin::Darwin()
 {
@@ -104,7 +105,7 @@ void Darwin::InitPopulation(int popSize)
 	p.numElites = 2;
 	p.crossRate = 0.7f;
 
-	p.selection = E_Selection::roulette; //rand 1-2 ??
+	p.selection = hf->GetRandomSelection();
 	p.name = "";
 	p.genes = InitGenes(popSize);
 
@@ -119,7 +120,7 @@ void Darwin::LoadPopulation(int popSize)
 	p.numElites = 2;
 	p.crossRate = 0.7f;
 
-	p.selection = E_Selection::roulette; //rand 1-2 ??
+	p.selection = hf->GetRandomSelection();
 	p.name = "";
 	p.genes = LoadGenes(popSize);
 
@@ -152,7 +153,7 @@ Gene Darwin::SelectGenome(Population pop)
 		{
 			selectedGenome.push_back(pop.genes[hf->GetRandomNumber(i)]);
 		}
-		//sortera 
+		SortGenes(selectedGenome);
 	}
 	return selectedGenome.back();
 }
@@ -175,7 +176,7 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 	pop.avgFitness = pop.totalFitness / pop.genes.size();
 	pop.maxFitness = tempMaxFit;
 	pop.minFitness = tempMinFit;
-	//sort
+	SortGenes(pop.genes);
 
 }
 
@@ -215,7 +216,6 @@ void Darwin::EvolvePopulation(Population elites)
 }
 #pragma endregion
 
-
 #pragma region gettersNsetters
 Population Darwin::GetActivePopulation()
 {
@@ -247,3 +247,18 @@ Gene Darwin::GetWorstGenome(Population pop)
 }
 #pragma endregion
 
+
+std::vector<Gene> SortGenes(std::vector<Gene>& genes)
+{
+	if(genes.size() == 0)
+		return std::vector<Gene>();
+
+	Gene gene = genes.front();
+
+	int i, j;
+	for(i = 0; i < genes.size() - 1; i++)
+		for(j = 0; j < genes.size() - i - 1; j++)
+			if(genes[j].weight < genes[j + 1].weight)
+				std::swap(genes[j], genes[j + 1]);
+	return genes;
+}

@@ -11,22 +11,8 @@ enemyStart = 0x0E68 -- 3688
 enemyFinish = 0x1228 -- 4648
 
 bulletsOnScreen = 0x08BB
--- DPad input
---buttonInput.left = false;
---buttonInput.right = false;
---buttonInput.up = false;
---buttonInput.down = false;
 
--- actionButton input
---buttonInput.b = false;
---buttonInput.a = false;
---buttonInput.y = false;
---buttonInput.x = false;
 
--- shoulder button input
---buttonInput.l = false;
---buttonInput.r = false;
----------------
 enemySpotted = true
 
 
@@ -60,32 +46,12 @@ local draw_megaman = true
 local draw_enemies = true
 local draw_hpvalues = true
 local draw_projectiles = true
---local draw_instantbox = false  -- Bizhawk doesnt support breakpoints
+--local draw_instantbox = false  -- Bizhawk doesnt suport breakpoints
 
 local xm
 local ym
 
 
--- Breakpoints not yet implemented in bizhawk
--- local function draw_instabox(base)
-
-	-- local camx = mainmemory.read_u16_le(cx)
-	-- local camy = mainmemory.read_u16_le(cy)
-	-- local facing = mainmemory.read_u8(base + 0x11)
-	-- local x = mainmemory.read_u16_le(base + 5) - camx
-	-- local y = mainmemory.read_u16_le(base + 8) - camy
-	-- local boxpointer = mainmemory.read_u16_le(base +0x20) + 0x860000
-	-- local xoff = mainmemory.read_s8(boxpointer + 0)
-	-- local yoff = mainmemory.read_s8(boxpointer + 1)
-	-- local xrad = mainmemory.read_u8(boxpointer + 2)
-	-- local yrad = mainmemory.read_u8(boxpointer + 3)
-
-	-- if facing > 0x45 then
-		-- xoff = xoff * -1
-	-- end
-
-	-- gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,0xFFFF0000,0x05FF0000)
--- end
 
 function setMegamanXInput(buttonIndex, buttonPressed)
 	buttonInput[buttonIndex] = buttonPressed
@@ -165,24 +131,29 @@ local function megaman()
 		output.MX = megamanPosX
 		output.MY = megamanPosY
 	end
+	
 	if facing > 0x45 then
 		xoff = xoff * -1
 	end
-local file = io.open( "MegamanStatus.txt", "w" )
-if file ~= nil
-then
-file:write( output.enemyPositionX.."\n")
-file:write( output.enemyPositionY.."\n")
-file:write( output.MX.."\n")
-file:write( output.MY.."\n")
-file:write( output.megamanHealth.."\n")
-file:write( output.currentLevel.."\n")
-file:write( output.megamanState.."\n")
-file:write( output.megamanBitflags.."\n")
-file:close()
-end
+
+
+	local file = io.open( "MegamanStatus.txt", "w" )
+	if file ~= nil
+	then
+		file:write( output.enemyPositionX.."\n")
+		file:write( output.enemyPositionY.."\n")
+		file:write( output.MX.."\n")
+		file:write( output.MY.."\n")
+		file:write( output.megamanHealth.."\n")
+		file:write( output.currentLevel.."\n")
+		file:write( output.megamanState.."\n")
+		file:write( output.megamanBitflags.."\n")
+		file:close()
+	end
 	gui.drawBox(x + xoff +xrad,y + yoff + yrad, x + xoff - xrad, y + yoff - yrad,0xFF0000FF,0x400000FF)
 end
+
+
 
 local function enemies()
 
@@ -272,6 +243,7 @@ local function enemies()
 		end
 	end
 end
+
 function tileData()
 
 	local tileTest = 0x2420
@@ -374,10 +346,12 @@ function tileData()
 		--end
 	--end
 end
+
 local function scaler()
 	xm = client.screenwidth() / 256
 	ym = client.screenheight() / 224
 end
+
 dofile("buttonInputTester.lua")
 --require "InputOutput"
 getInput =
@@ -463,7 +437,6 @@ while true do
 	if draw_megaman == true then
 		megaman()
 		--SetJoypadInput()
-		binput2:SetResults(output)
 --		SetResults(output)
 	end
 	if draw_enemies == true then
@@ -471,5 +444,7 @@ while true do
 
 		enemies()
 	end
+	binput2.SetResults(output)
+
 	emu.frameadvance()
 end

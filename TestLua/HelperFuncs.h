@@ -3,6 +3,8 @@
 #include <fstream>
 #include <sstream>
 #include "Genome.h"
+#include "Population.h"
+
 class HelperFuncs
 {
 	std::vector<float> megamanValues;
@@ -27,10 +29,25 @@ public:
 	}
 	float GetRandomNumber()
 	{
-
 		return (float)rand() / RAND_MAX;
-
 	}
+
+	int GetRandomIntNumber()
+	{
+		return (int)rand() / RAND_MAX;
+	}
+	int GetRandomIntNumber(int max, int min)
+	{
+		return (int)rand() % (max - min + 1) + min;
+	}
+
+	
+	E_Selection GetRandomSelection()
+	{
+		E_Selection val = static_cast<E_Selection>(GetRandomIntNumber(2, 1));
+		return val;
+	}
+	
 
 	void Save(std::string name, std::vector<Gene> genes)
 	{
@@ -123,14 +140,14 @@ public:
 		std::vector<float> megamanXoutput;
 		std::ifstream readLuaFile("LuaScript/MegamanStatus.txt");
 		std::string luaLine;
-		int k= 0;
-		while (std::getline(readLuaFile, luaLine))
+		int k = 0;
+		while(std::getline(readLuaFile, luaLine))
 		{
 			float value;
 
 			std::stringstream ss(luaLine);
 
-			for (size_t j = 0; j < 8; j++)
+			for(size_t j = 0; j < 8; j++)
 			{
 				ss >> value;
 				std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;

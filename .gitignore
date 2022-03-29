@@ -58,3 +58,4 @@ TestLua/TestLua.vcxproj
 TestLua/x64/Debug/TestLua.Build.CppClean.log
 TestLua/x64/Debug/TestLua.Build.CppClean.log
 TestLua/x64/Debug/main.obj.enc
+*.tlog

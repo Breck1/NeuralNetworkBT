@@ -128,14 +128,12 @@ void Update()
 void CompleteTest() //klar
 {
 	float fitness = maxMX - startMX;
-	if (currentGenomeIndex < d->activePopulation.genes.size())
-
-	d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
+	if(currentGenomeIndex < d->activePopulation.genes.size())
+		d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
 
 	if(currentSaveStateIndex == savestates)
 	{
-
-		if (currentGenomeIndex < d->activePopulation.genes.size())
+		if(currentGenomeIndex < d->activePopulation.genes.size())
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
 
@@ -159,7 +157,7 @@ void InitNewTest()
 			currentGenomeIndex++;
 		}
 		if(currentGenomeIndex < d->activePopulation.genes.size())
-		d->activePopulation.genes[currentGenomeIndex].fitness = 0;
+			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 		//TODO Lägg in NN här
 
 		//--------------------------------- Random nummer för test
@@ -204,13 +202,16 @@ int main()
 
 	int topology = h->GetNumWeights(layers); // weights
 	d->InitPopulation(populationSize);
+
 	//d->LoadPopulation(populationSize);
-	InitNewTest();
+	//InitNewTest();
+	/*
 	while(true) //update until you lose or stand still too long
 	{
 	Update();
 		//lua emu. frameadvance
 	}
+	*/
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 	return 0;
