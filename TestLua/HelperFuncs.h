@@ -8,6 +8,14 @@ class HelperFuncs
 	std::vector<float> megamanValues;
 
 public:
+
+	template <typename T>
+	void Swap(T& a, T& b)
+	{
+		T temp = a;
+		a = b;
+		b = temp;
+	}
 	int GetNumWeights(std::vector<int> topology)
 	{
 		int num = 0;
