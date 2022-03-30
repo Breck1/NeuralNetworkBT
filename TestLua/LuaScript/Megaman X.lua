@@ -16,17 +16,20 @@ x = false,
 l = false,
 r = false,
 
-start = false,
-select = false,
 }
+
 --require "buttonInputTester"
 function SetInputCPP(index, boolean)
 	i = index
 	buttonInput = {}
 	input = 0
 	buttonInput[index] = boolean
+	print("[LUA] SetInputCPP, buttonInput set to: ")
+	print(buttonInput[index])
+	print("At index: ")
+	print(index)
 
-	return
+	return buttonInput
 end
 
 local tileStart = 0x0300
@@ -147,15 +150,15 @@ function megaman()
 			if facing > 0x45 
 			then
 				xoff = xoff * -1
-			local file = io.open( "MegamanStatus.txt", "w" )
 			end
+		local file = io.open( "MegamanStatus.txt", "w" )
 		if file ~= nil
 		then
-			file:write(output.enemyPositionX.."\n")
-			file:write(output.enemyPositionY.."\n")
 			file:write(output.MX.."\n")
 			file:write(output.MY.."\n")
 			file:write(output.megamanHealth.."\n")
+			file:write(output.enemyPositionX.."\n")
+			file:write(output.enemyPositionY.."\n")
 			file:write(output.megamanState.."\n") -- Megaman State address 6 = rising, 8 = falling 14 = dashing 2 = walking
 			file:write(output.megamanBitflags.."\n") -- 04 = Standing, 02 = hanging on left wall, 01 = hanging on right wall
 			file:close()
@@ -313,8 +316,7 @@ joypadString[8] = "X"
 joypadString[9] = "L"
 joypadString[10] = "R"
 
-joypadString[11] = "Start"
-joypadString[12] = "Select"
+buttonAmount = 10
 
 local function SetJoypadInput()
 
@@ -324,21 +326,37 @@ local function SetJoypadInput()
 		--getInput = buttonInput
 		local buttonsPressed = {}
 		index = 1
-		for i, v in pairs(buttonInput)
-		do
-			getInput[index] = v
-			index = index + 1
+		local lines = {}
+		local files = io.open( "ButtonInput.txt", "rb" )
+		if files ~= nil
+		then
+		for line in io.lines("ButtonInput.txt", "rb" ) 
+			do
+				lines[#lines + 1] = line
+			end
 		end
+files:close()
 
-		for i = 1, 12
+    
+		
+		for i = 1, buttonAmount
 		do
-			buttonsPressed[getJoypadString[i]] = getInput[i]
-			print(getInput[i])
+			if lines[i] == "1"
+			then
+				getInput[i] = true
+			else
+				getInput[i] = false
+			end
+			
+			--print(getInput[i])
+			
 			if gui ~= nil
 			then
 				gui.text(2, 64 + i * 8, string.upper(getJoypadString[i]))
 			end
+		buttonsPressed[getJoypadString[i]] = getInput[i]
 		end
+		--print(buttonPressed)
 		if joypad ~= nil
 		then
 			joypad.set(buttonsPressed, 1)

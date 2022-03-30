@@ -13,6 +13,9 @@ int savestates = 1;
 
 int inputRadius = 6;
 int populationSize = 30;
+int buttonAmount = 10;
+
+bool firstTest = true;
 std::vector<Gene> genePerPop;
 
 
@@ -21,7 +24,7 @@ std::vector<int> buttonIndex; // = 14;
 std::vector<int> numInputs; //
 std::vector<int> numOutputs; // = 14 -- buttons
 
-std::vector<int> layers{ 8, 12 , 12 , 12 }; // input - x - x - outputs
+std::vector<int> layers{ 8, 12 , 12 , buttonAmount }; // input - x - x - outputs
 std::vector<int> numWeights;
 
 std::vector<float> randomTest;
@@ -43,7 +46,7 @@ int startMX = 0;
 int startMY = 0;
 int MX = 0;
 int MY = 0;
-
+int MHealth = 0;
 #pragma endregion
 
 int globalFitnessScore = 0;
@@ -76,24 +79,33 @@ void Update()
 
 	//TESTING
 	//----------------------------------------------
+	randomTest.clear();
+	randomTest.resize(0);
 
 
-	for(int i = 0; i < 12; i++)
+	for(int i = 0; i < 10; i++)
 	{
 		randomTest.push_back(h->GetRandomNumber());
 	}
 
+	
+	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, firstTest ? randomTest : d->activePopulation.genes.back().weight));
+	h->SetMegamanXOutput();
+	if (h->GetMegamanXOutput().size() > 0) 
+	{
+		MX = h->GetMegamanXOutput()[0];
+		MY = h->GetMegamanXOutput()[1];
+		MHealth = h->GetMegamanXOutput()[2];
 
-	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, randomTest));
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
+	}
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
 	totalFrames++;
 
 	if(MX == 0 && MY == 0)//Kanske måste ändra värden för megaman
 		CompleteTest(); //"death or completed level" -- kan inte se skillnad på dem?
-
+	if (MHealth == 0)
+		CompleteTest();
 	if(MX > maxMX)
 	{
 		lastProgressCounter = 0; //best in test
@@ -126,6 +138,7 @@ void Update()
 
 void CompleteTest() //klar
 {
+	firstTest = false;
 	float fitness = maxMX - startMX;
 	if(currentGenomeIndex < d->activePopulation.genes.size())
 		d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
@@ -161,7 +174,7 @@ void InitNextTest()
 		/* 
 		//--------------------------------- Random nummer för test
 		Ganska säker på att detta är balony och inte bhr va här
-		for(int i = 0; i < 12; i++)
+		for(int i = 0; i < buttonAmount; i++)
 		{
 			randomTest.push_back(h->GetRandomNumber());
 		}
@@ -179,8 +192,8 @@ void InitNextTest()
 	}
 
 
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
+	MX = m->GetEmulatorOutput()[0];
+	MY = m->GetEmulatorOutput()[1];
 	lastMX = MX;
 	lastMY = MY;
 	maxMX = MX;
@@ -197,9 +210,10 @@ void InitNextTest()
 
 int main()
 {
-	srand((unsigned)3 * time(NULL));
-
-
+	
+	srand((unsigned)time(NULL));
+	
+	h->SetMegamanXOutput();
 	//-------------------------------------------------------------------
 
 	int topology = h->GetNumWeights(layers); // weights

@@ -10,7 +10,7 @@ class HelperFuncs
 	std::vector<float> megamanValues;
 
 public:
-
+	
 	template <typename T>
 	void Swap(T& a, T& b)
 	{
@@ -153,14 +153,16 @@ public:
 
 			std::stringstream ss(luaLine);
 
-			for(size_t j = 0; j < 8; j++)
-			{
 				ss >> value;
-				std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;
 				megamanXoutput.push_back(value);
-				//std::cout << j << " " << genes[k].weight[j] << std::endl;
+				//std::cout << "MegamanStatus.txt Line: " << " Value: " << value << std::endl;
 
-			}
+			//for(size_t j = 0; j < 8; j++)
+			//{
+			//	std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;
+			//	//std::cout << j << " " << genes[k].weight[j] << std::endl;
+
+			//}
 
 			k++;
 

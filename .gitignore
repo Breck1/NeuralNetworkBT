@@ -59,3 +59,9 @@ TestLua/x64/Debug/TestLua.Build.CppClean.log
 TestLua/x64/Debug/TestLua.Build.CppClean.log
 TestLua/x64/Debug/main.obj.enc
 *.tlog
+TestLua/LuaScript/backup.1.DP1.state.pool
+TestLua/LuaScript/backup.2.DP1.state.pool
+TestLua/LuaScript/backup.3.DP1.state.pool
+TestLua/LuaScript/backup.4.DP1.state.pool
+TestLua/LuaScript/backup.5.DP1.state.pool
+TestLua/LuaScript/backup.6.DP1.state.pool

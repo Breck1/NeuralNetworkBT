@@ -44,45 +44,8 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 		else
 			file << 0 << std::endl;
 		emulatorInput[i] = geneOutput[i] > 0.6f;
-		std::cout << "geneOutput i: " << geneOutput[i] << std::endl;
+		//std::cout << "geneOutput i: " << geneOutput[i] << std::endl;
 
 	}
 
-	lua_State* L = luaL_newstate();
-	luaL_openlibs(L);
-
-	if(CheckLua(L, luaL_dofile(L, "LuaScript/Megaman X.lua")))
-	{
-		luaL_openlibs(L);
-		for(int i = 0; i < genomeSize; i++)
-		{
-			lua_getglobal(L, "SetInputCPP");
-
-			lua_pushnumber(L, (i + 1));
-			lua_pushboolean(L, emulatorInput[i]);
-
-			CheckLua(L, lua_pcall(L, 2, 1, 0));
-
-		}
-		lua_getglobal(L, "output");
-
-
-
-		for(int index = 0; index < getOutput.size(); index++)
-		{
-			int actualIndex = index + 1;
-
-			lua_pushinteger(L, actualIndex);
-			lua_gettable(L, -2);
-
-			if(lua_type(L, -1) == LUA_TNIL)
-				break;
-
-			getOutput[index] = luaL_checknumber(L, -1);
-			lua_pop(L, 1);
-			std::cout << getOutput[index] << std::endl;
-		}
-		lua_close(L);
-
-	}
 }

@@ -196,7 +196,7 @@ void Darwin::EvolvePopulation(Population elites)
 
 	Population mutated;
 	// create the rest by mutation and crossover
-	while(newPopulation.genes.size() < elites.genes.size())
+	while(newPopulation.genes.size() < elites.numElites)
 	{
 		Population mother;
 		Population father;
