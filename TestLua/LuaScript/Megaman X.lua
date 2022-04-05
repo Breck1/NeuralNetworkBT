@@ -2,6 +2,13 @@
 ---------------
 ----GLOBALS----
 
+
+--[[ 
+		** RAM watch notes **
+		0x00B4 background intro stage
+
+
+]]
 buttonInput = {
 left = false,
 right = false,
@@ -272,6 +279,43 @@ local function tileData()
 	local outl
 	local start = 0x0300 --3688
 	local oend = 64
+	local tempTile = 0x2400
+	local tempFinish = tempTile + 64
+	
+	for i = 0, oend, 1
+	do
+	base = start + (i * 0x40) -- 3688 + (i * 64) || läser en fiende i taget
+
+	--print("value of I")
+		--print(i)
+		--print("value at adress")
+		--print(mainmemory.read_u16_le(i))
+		
+	x = mainmemory.read_u16_le(base + 5) - camx
+	y = mainmemory.read_u16_le(base + 8) - camy
+	boxpointer = mainmemory.read_u16_le(base +0x20) + 0x28000
+
+	fill = 0x40000000 -- svart
+	outl = 0xFF000000 -- gör ingenting
+	--[[for i = 0, 0x028, 1 
+	do
+		testPointer = mainmemory.read_u16_le(tileTest + i);
+		--print("for loop i value: " ..i)
+		--print("TestPointer: "..testPointer)
+	end
+	]]
+	xtestoff = memory.read_u16_le(testPointer + 0)
+	ytestoff = memory.read_u16_le(testPointer + 1)
+	xtestrad = memory.read_u16_le(testPointer + 2)
+	ytestrad = memory.read_u16_le(testPointer + 3)
+	gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
+	end
+	
+	--print(memory.read_s24_be(0x0B92))
+
+end
+
+--[[
 
 	x = mainmemory.read_u16_le(base + 5) - camx
 	y = mainmemory.read_u16_le(base + 8) - camy
@@ -293,6 +337,7 @@ local function tileData()
 	gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
 
 end
+]]
 function scaler()
 	if client ~= nil
 	then
@@ -370,7 +415,8 @@ while true do
 	scaler()
 	if draw_megaman == true then
 		megaman()
-		SetJoypadInput()
+		--SetJoypadInput()
+		tileData()
 	end
 	if draw_enemies == true 
 	then
