@@ -28,6 +28,7 @@ std::vector<int> layers{ 8, 12 , 12 , buttonAmount }; // input - x - x - outputs
 std::vector<int> numWeights;
 
 std::vector<float> randomTest;
+std::vector<float> pressButtons;
 int currentPopulation;
 int currentSaveStateIndex = 1;
 int currentStateIndex;
@@ -83,13 +84,10 @@ void Update()
 	randomTest.resize(0);
 
 
-	for(int i = 0; i < 10; i++)
-	{
-		randomTest.push_back(h->GetRandomNumber());
-	}
+
 
 	
-	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, firstTest ? randomTest : d->activePopulation.genes.back().weight));
+	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes,pressButtons));
 	h->SetMegamanXOutput();
 	if (h->GetMegamanXOutput().size() > 0) 
 	{
@@ -150,6 +148,30 @@ void CompleteTest() //klar
 	}
 	
 	InitNextTest();
+}
+
+std::vector<float> GetButtonInputs()
+{
+	if (pressButtons.size() != buttonAmount)
+	{
+		printf("pressButton array has %d amount of buttons instead of %d \n", pressButtons.size(), buttonAmount);
+	}
+	/*
+	local outputs = {}
+		for o = 1, Outputs do
+			local button = "P1 " ..ButtonNames[o]
+			if network.neurons[MaxNodes + o].value > 0 then
+				outputs[button] = true
+			else
+				outputs[button] = false
+			end
+		end
+	*/
+	for (int i = 0; i < buttonAmount; i++)
+	{
+
+	}
+	return pressButtons;
 }
 
 void InitNextTest()
@@ -213,6 +235,18 @@ int main()
 	
 	srand((unsigned)time(NULL));
 	
+
+	for (int i = 0; i < 7683; i++)
+	{
+		if (i % 16 == 0)
+			std::cout << i << "\n";
+	}
+	for (int i = 0; i < 10; i++)
+	{
+		randomTest.push_back(h->GetRandomNumber());
+	}
+	pressButtons = randomTest;
+
 	h->SetMegamanXOutput();
 	//-------------------------------------------------------------------
 
@@ -227,7 +261,8 @@ int main()
 		Update();
 		//lua emu. frameadvance
 	}
-	
+	delete h;
+	h = nullptr;
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 	return 0;
