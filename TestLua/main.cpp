@@ -66,7 +66,7 @@ void Update()
 	106 - 121 IN LUA PROJECT
 
 
-	Gör inputs = std::vector<float>inputs;
+	Gï¿½r inputs = std::vector<float>inputs;
 	skicka till NN
 	set joystick
 	lessgo
@@ -91,8 +91,8 @@ void Update()
 	//----------------------------------------------
 	totalFrames++;
 
-	if(MX == 0 && MY == 0)//Kanske måste ändra värden för megaman
-		CompleteTest(); //"death or completed level" -- kan inte se skillnad på dem?
+	if(MX == 0 && MY == 0)//Kanske mï¿½ste ï¿½ndra vï¿½rden fï¿½r megaman
+		CompleteTest(); //"death or completed level" -- kan inte se skillnad pï¿½ dem?
 
 	if(MX > maxMX)
 	{
@@ -135,7 +135,6 @@ void CompleteTest() //klar
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
-	
 	InitNextTest();
 }
 
@@ -144,7 +143,7 @@ void InitNextTest()
 
 	if(currentSaveStateIndex >= savestates)
 	{
-		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla på den sen
+		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla pï¿½ den sen
 		{
 			d->RecalculatePopulationFitness(d->activePopulation);
 			d->EvolvePopulation(d->activePopulation);
@@ -159,8 +158,8 @@ void InitNextTest()
 			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 
 		/* 
-		//--------------------------------- Random nummer för test
-		Ganska säker på att detta är balony och inte bhr va här
+		//--------------------------------- Random nummer fï¿½r test
+		Ganska sï¿½ker pï¿½ att detta ï¿½r balony och inte bhr va hï¿½r
 		for(int i = 0; i < 12; i++)
 		{
 			randomTest.push_back(h->GetRandomNumber());

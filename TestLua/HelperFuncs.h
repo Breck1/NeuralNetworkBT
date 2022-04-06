@@ -54,7 +54,7 @@ public:
 	
 	E_Selection GetRandomSelection()
 	{
-		E_Selection val = static_cast<E_Selection>(GetRandomIntNumber(2, 1));
+		E_Selection val = static_cast<E_Selection>(GetRandomIntNumber(1, 0));
 		return val;
 	}
 
