@@ -15,23 +15,24 @@ int inputRadius = 6;
 int populationSize = 30;
 std::vector<Gene> genePerPop;
 
-
 std::vector<int> buttonIndex; // = 14;
 
 std::vector<int> numInputs; //
 std::vector<int> numOutputs; // = 14 -- buttons
 
-std::vector<int> layers{ 8, 12 , 12 , 12 }; // input - x - x - outputs
+std::vector<int> layers{ 7, 12 , 12 , 12 }; // input - x - x - outputs
 std::vector<int> numWeights;
 
 std::vector<float> randomTest;
+std::vector<float> pressButton;
+std::vector<float> inputs;
 int currentPopulation;
 int currentSaveStateIndex = 1;
 int currentStateIndex;
 int currentGenomeIndex;
 
 #pragma region Checking progress
-
+int buttonAmount = 10;
 int totalFrames = 0;
 int lastMovementCounter = 0;
 int lastProgressCounter = 0;
@@ -43,6 +44,7 @@ int startMX = 0;
 int startMY = 0;
 int MX = 0;
 int MY = 0;
+int MHealth = 0;
 
 #pragma endregion
 
@@ -57,9 +59,16 @@ ManageInputOutput* m = new ManageInputOutput;
 void CompleteTest();
 void InitNextTest();
 
+double oldTime = 0;
+double curTime;
+double deltaTime;
+int testCounter = 0;
+int populationCounter = 0;
+bool firstTest = true;
 #pragma region loop
 void Update()
 {
+	deltaTime = clock() - oldTime;
 	//Some GUI stuff ??
 
 	/*
@@ -78,15 +87,28 @@ void Update()
 	//----------------------------------------------
 
 
-	for(int i = 0; i < 12; i++)
-	{
-		randomTest.push_back(h->GetRandomNumber());
-	}
+	//for(int i = 0; i < 12; i++)
+	//{
+	//	randomTest.push_back(h->GetRandomNumber());
+	//}
+	randomTest.clear();
+	randomTest.resize(0);
 
 
-	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, randomTest));
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
+	inputs = h->SetMegamanXOutput();
+
+	if (inputs.size() > 0)
+		{
+			pressButton = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
+			m->SetButtonInput(pressButton);
+			MX = h->GetMegamanXOutput()[0];
+			MY = h->GetMegamanXOutput()[1];
+			MHealth = h->GetMegamanXOutput()[2];
+			randomTest.push_back(h->GetRandomNumber());
+
+			m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, pressButton));
+		}
+
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
 	totalFrames++;
@@ -100,7 +122,7 @@ void Update()
 	}
 	else
 	{
-		lastProgressCounter++;
+		lastProgressCounter+= deltaTime;
 		if(lastProgressCounter > PROGRESS_TIMEOUT)
 			CompleteTest(); //Progress timeout
 	}
@@ -118,14 +140,22 @@ void Update()
 	}
 	else
 	{
-		lastMovementCounter++;
+		lastProgressCounter += deltaTime;
 		if(lastMovementCounter > MOVEMENT_TIMEOUT)
 			CompleteTest(); //Movement timeout
 	}
+	oldTime = clock();
 }
 
 void CompleteTest() //klar
 {
+	testCounter++;
+	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
+	for (int i = 0; i < pressButton.size(); i++)
+	{
+		std::cout << "At index: " << i << " pressButton is: " << pressButton[i] << std::endl;
+	}
+	firstTest = false;
 	float fitness = maxMX - startMX;
 	if(currentGenomeIndex < d->activePopulation.genes.size())
 		d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
@@ -137,16 +167,44 @@ void CompleteTest() //klar
 	}
 	InitNextTest();
 }
+std::vector<float> GetButtonInputs()
+{
+	if (pressButton.size() != buttonAmount)
+	{
+		printf("pressButton array has %d amount of buttons instead of %d \n", pressButton.size(), buttonAmount);
+	}
+	/*
+	local outputs = {}
+		for o = 1, Outputs do
+			local button = "P1 " ..ButtonNames[o]
+			if network.neurons[MaxNodes + o].value > 0 then
+				outputs[button] = true
+			else
+				outputs[button] = false
+			end
+		end
+	*/
+	for (int i = 0; i < buttonAmount; i++)
+	{
+
+	}
+	return pressButton;
+}
 
 void InitNextTest()
 {
-
+	h->LoadEmuSaveState();
+	inputs = h->SetMegamanXOutput();
 	if(currentSaveStateIndex >= savestates)
 	{
 		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla p� den sen
 		{
 			d->RecalculatePopulationFitness(d->activePopulation);
 			d->EvolvePopulation(d->activePopulation);
+			populationCounter++;
+
+			std::cout << "New population generated\n";
+			std::cout << "Population number: " << populationCounter << std::endl;
 
 			currentGenomeIndex = 1;
 		}
