@@ -10,10 +10,10 @@
 
 ]]
 buttonInput = {
-left = false,
-right = false,
 up = false,
 down = false,
+left = false,
+right = false,
 
 b = false,
 a = false,
@@ -38,6 +38,7 @@ function SetInputCPP(index, boolean)
 
 	return buttonInput
 end
+	StateName = "MMX.state"
 
 local tileStart = 0x0300
 local tileFinish = 0x04FF
@@ -140,10 +141,10 @@ function megaman()
 			local megamanHealthAddress = 0x0BCF
 
 			local health = mainmemory.read_u8(megamanHealthAddress)
-			output.currentLevel = memory.read_s8(currentLevelData)
+			output.currentLevel = mainmemory.read_u8(currentLevelData)
 
-			output.megamanState = memory.read_s8(stateAddress)
-			output.megamanBitflags = memory.read_s8(bitflags)
+			output.megamanState = mainmemory.read_u8(stateAddress)
+			output.megamanBitflags = mainmemory.read_u8(bitflags)
 				megamanPosX = x + camx
 				megamanPosY = y + camy
 
@@ -212,7 +213,7 @@ function enemies()
 					if draw_projectiles == true 
 					then
 						fill = 0x40FFFFFF -- vitt
-						outl = 0xFFFFFFFF -- egna skott
+						outl = 0xFFFFFFFF -- egna skott -- 0x124A memory adress for bullet X axis
 					else
 						fill = 0x40000000 -- svart
 						outl = 0xFF000000 -- gör ingenting
@@ -226,6 +227,10 @@ function enemies()
 				then
 					fill = 0x40FFFF00 -- Gul = bad
 					outl = 0xFFFFFF00 -- skott och drops
+					print("i has number")
+					print(i) -- falling platform at miniboss 'i' = 31
+					print("value at base")
+					print(base) -- falling platform at miniboss, 'base' = 5672, x position at memory address 0x164A
 				end
 	
 				facing = mainmemory.read_u8(base + 0x11)
@@ -279,12 +284,12 @@ local function tileData()
 	local outl
 	local start = 0x0300 --3688
 	local oend = 64
-	local tempTile = 0x2400
+	local tempTile = 0x1AAD --0x1628
 	local tempFinish = tempTile + 64
-	
+	local testPointer
 	for i = 0, oend, 1
 	do
-	base = start + (i * 0x40) -- 3688 + (i * 64) || läser en fiende i taget
+	base = tempTile + (i * 0x40) -- 3688 + (i * 64) || läser en fiende i taget
 
 	--print("value of I")
 		--print(i)
@@ -297,18 +302,18 @@ local function tileData()
 
 	fill = 0x40000000 -- svart
 	outl = 0xFF000000 -- gör ingenting
-	--[[for i = 0, 0x028, 1 
+	for i = 0, 0x028, 1 
 	do
-		testPointer = mainmemory.read_u16_le(tileTest + i);
+		testPointer = mainmemory.read_u16_le(tileTest + i) + 0x28000;
 		--print("for loop i value: " ..i)
 		--print("TestPointer: "..testPointer)
 	end
-	]]
 	xtestoff = memory.read_u16_le(testPointer + 0)
 	ytestoff = memory.read_u16_le(testPointer + 1)
 	xtestrad = memory.read_u16_le(testPointer + 2)
 	ytestrad = memory.read_u16_le(testPointer + 3)
 	gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
+	
 	end
 	
 	--print(memory.read_s24_be(0x0B92))
@@ -372,15 +377,15 @@ local function SetJoypadInput()
 		local buttonsPressed = {}
 		index = 1
 		local lines = {}
-		local files = io.open( "ButtonInput.txt", "rb" )
+		local files = io.open( "ButtonInput.txt", "r" )
 		if files ~= nil
 		then
-		for line in io.lines("ButtonInput.txt", "rb" ) 
+		for line in io.lines("ButtonInput.txt", "r" ) 
 			do
 				lines[#lines + 1] = line
 			end
 		end
-files:close()
+		files:close()
 
     
 		
@@ -407,7 +412,25 @@ files:close()
 			joypad.set(buttonsPressed, 1)
 		end
 end
-
+local function LoadState()
+	lines = {}
+	local file = io.open("LoadState.txt", "r+")
+	if file ~= nil
+	then
+		for line in io.lines("LoadState.txt", "rb" ) 
+		do
+			lines[#lines + 1] = line
+		end
+		
+		
+		if lines[1] == "0"
+		then
+			savestate.load(StateName);
+			file:write("1".."\n")
+		end			
+		file:close()
+	end
+end
 --local binput2 = ButtonInput2.new(12)
 if mainmemory ~= nil
 then
@@ -415,7 +438,8 @@ while true do
 	scaler()
 	if draw_megaman == true then
 		megaman()
-		--SetJoypadInput()
+		LoadState()
+		SetJoypadInput()
 		tileData()
 	end
 	if draw_enemies == true 

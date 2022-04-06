@@ -31,21 +31,22 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 {
 	std::ofstream file("LuaScript/ButtonInput.txt");
 	std::string line;
-	
+	//if (file == NULL)
+	//	std::cout << "LuaScript/ButtonInput.txt is null" << std::endl;
 	int genomeSize = geneOutput.size();
 	
 	emulatorInput.resize(genomeSize);
-
 	for(int i = 0; i < genomeSize; i++)
 	{
+		file << ((geneOutput[i] > 0.6f) ? "1" : "0") << std::endl;
 
-		if(geneOutput[i] > 0.6f)
-			file << 1 << std::endl;
-		else
-			file << 0 << std::endl;
-		emulatorInput[i] = geneOutput[i] > 0.6f;
-		//std::cout << "geneOutput i: " << geneOutput[i] << std::endl;
-
+		//if(geneOutput[i] > 0.5f)
+		//	file << std::endl << 1;
+		//else
+		//	file << std::endl << 0;
+		emulatorInput[i] = geneOutput[i] > 0.5f;
+		//std::cout << "geneOutput i: " << i << " Gene output " << geneOutput[i] << std::endl;
 	}
+		file.close();
 
 }

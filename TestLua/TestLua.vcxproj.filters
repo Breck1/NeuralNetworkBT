@@ -59,5 +59,6 @@
     <Text Include="ReadWriteTest.txt" />
     <Text Include="LuaScript\MegamanStatus.txt" />
     <Text Include="LuaScript\ButtonInput.txt" />
+    <Text Include="LuaScript\LoadState.txt" />
   </ItemGroup>
 </Project>

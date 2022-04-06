@@ -6,7 +6,7 @@
 
 #pragma region lmao globals
 //struct it up
-const float MOVEMENT_TIMEOUT = 1;
+const float MOVEMENT_TIMEOUT = 0.5;
 const float PROGRESS_TIMEOUT = 1;
 
 int savestates = 1;
@@ -24,18 +24,20 @@ std::vector<int> buttonIndex; // = 14;
 std::vector<int> numInputs; //
 std::vector<int> numOutputs; // = 14 -- buttons
 
-std::vector<int> layers{ 8, 12 , 12 , buttonAmount }; // input - x - x - outputs
+std::vector<int> layers{ 7, 12 , 12 , buttonAmount }; // input - x - x - outputs
 std::vector<int> numWeights;
 
 std::vector<float> randomTest;
 std::vector<float> pressButtons;
+std::vector<float> inputs;
 int currentPopulation;
 int currentSaveStateIndex = 1;
 int currentStateIndex;
 int currentGenomeIndex;
 
 #pragma region Checking progress
-
+int testCounter = 0;
+int populationCounter = 0;
 int totalFrames = 0;
 int lastMovementCounter = 0;
 int lastProgressCounter = 0;
@@ -60,12 +62,14 @@ ManageInputOutput* m = new ManageInputOutput;
 
 void CompleteTest();
 void InitNextTest();
-
+double oldTime = 0;
+double curTime;
+double deltaTime;
 #pragma region loop
 void Update()
 {
 	//Some GUI stuff ??
-
+	deltaTime = clock() - oldTime;
 	/*
 	106 - 121 IN LUA PROJECT
 
@@ -84,13 +88,12 @@ void Update()
 	randomTest.resize(0);
 
 
+	inputs = h->SetMegamanXOutput();
 
-
-	
-	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes,pressButtons));
-	h->SetMegamanXOutput();
-	if (h->GetMegamanXOutput().size() > 0) 
+	if (inputs.size() > 0) 
 	{
+		pressButtons = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
+		m->SetButtonInput(pressButtons);
 		MX = h->GetMegamanXOutput()[0];
 		MY = h->GetMegamanXOutput()[1];
 		MHealth = h->GetMegamanXOutput()[2];
@@ -110,7 +113,7 @@ void Update()
 	}
 	else
 	{
-		lastProgressCounter++;
+		lastProgressCounter+= deltaTime;
 		if(lastProgressCounter > PROGRESS_TIMEOUT)
 			CompleteTest(); //Progress timeout
 	}
@@ -128,14 +131,21 @@ void Update()
 	}
 	else
 	{
-		lastMovementCounter++;
+		lastMovementCounter+= deltaTime;
 		if(lastMovementCounter > MOVEMENT_TIMEOUT)
 			CompleteTest(); //Movement timeout
 	}
+	oldTime = clock();
 }
 
 void CompleteTest() //klar
 {
+	testCounter++;
+	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
+	for (int i = 0; i < pressButtons.size(); i++)
+	{
+		std::cout << "At index: " << i << " pressButton is: " << pressButtons[i] << std::endl;
+	}
 	firstTest = false;
 	float fitness = maxMX - startMX;
 	if(currentGenomeIndex < d->activePopulation.genes.size())
@@ -177,13 +187,15 @@ std::vector<float> GetButtonInputs()
 void InitNextTest()
 {
 
+	h->LoadEmuSaveState();
+	inputs = h->SetMegamanXOutput();
 	if(currentSaveStateIndex >= savestates)
 	{
 		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla på den sen
 		{
 			d->RecalculatePopulationFitness(d->activePopulation);
 			d->EvolvePopulation(d->activePopulation);
-
+			std::cout << "New population generated\n";
 			currentGenomeIndex = 1;
 		}
 		else

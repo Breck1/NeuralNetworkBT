@@ -106,7 +106,7 @@ public:
 
 		return genes;
 	}
-
+	
 	std::vector<float> GenerateOutputs(std::vector<int> layers, std::vector<Gene> weights, std::vector<float> inputs)
 	{
 		std::vector<float> activations;
@@ -190,6 +190,14 @@ public:
 				if(genes[j].weight < genes[j + 1].weight)
 					Swap(genes[j], genes[j + 1]);
 		return genes;
+	}
+	void LoadEmuSaveState()
+	{
+		std::ofstream file("LuaScript/LoadState.txt");
+		std::string line = "0";
+		
+		file << line << std::endl;
+		file.close();
 	}
 };
 

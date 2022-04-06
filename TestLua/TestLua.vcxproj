@@ -172,6 +172,7 @@
   </ItemGroup>
   <ItemGroup>
     <Text Include="LuaScript\ButtonInput.txt" />
+    <Text Include="LuaScript\LoadState.txt" />
     <Text Include="LuaScript\MegamanStatus.txt" />
     <Text Include="ReadWriteTest.txt" />
   </ItemGroup>
