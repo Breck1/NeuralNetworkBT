@@ -101,6 +101,10 @@ std::vector<Gene> Darwin::ByCrossover(Population mother, Population father)
 void Darwin::InitPopulation(int popSize)
 {
 	Population p;
+	p.avgFitness = 0;
+	p.maxFitness = 0;
+	p.minFitness = 0;
+	p.totalFitness = 0;
 	p.mutMax = 0.5f;
 	p.mutRate = 0.2f;
 	p.numElites = 2;
@@ -116,6 +120,7 @@ void Darwin::InitPopulation(int popSize)
 void Darwin::LoadPopulation(int popSize)
 {
 	Population p;
+
 	p.mutMax = 0.5f;
 	p.mutRate = 0.2f;
 	p.numElites = 2;
@@ -174,8 +179,9 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 		if(pop.genes[i].fitness < tempMinFit)
 			tempMinFit = pop.genes[i].fitness;
 	}
-
-	pop.avgFitness = pop.totalFitness / pop.genes.size();
+	if(pop.totalFitness != 0)
+		pop.avgFitness = pop.totalFitness / pop.genes.size();
+	
 	pop.maxFitness = tempMaxFit;
 	pop.minFitness = tempMinFit;
 	hf->SortGenes(pop.genes); //Otestat

@@ -29,7 +29,7 @@ function table.contains(table, element)
     return false
 end
 
-local ADDR = 
+local ADDR =
 {
 --Fyll med sprite data
 --[[
@@ -78,7 +78,7 @@ local MINOR_SPRITE_COUNT        = 0
 local ENEMY_SPRITES =
 {
     --[[
-        
+
     GREEN_KOOPA_NOSHELL         = 0x00,
     RED_KOOPA_NOSHELL           = 0x01,
     BLUE_KOOPA_NOSHELL          = 0x02,
@@ -329,7 +329,7 @@ function Megaman_io.getCameraPos()
 end
 
 function Megaman_io.getMegamanPos()
-    return read_u16(ADDR.megamanPosX),  read_u16(ADDR.megamanPosY) 
+    return read_u16(ADDR.megamanPosX),  read_u16(ADDR.megamanPosY)
 end
 
 function Megaman_io.getMegamanScreenPos()
@@ -356,7 +356,8 @@ function Megaman_io.getTile(x, y)
         end
     end
 
-    return {
+    return
+    {
         x = numX,
         y = numY,
         kind = kind
@@ -370,25 +371,34 @@ function Megaman_io.get_inputs(radius)
     local mx, my = Megaman_io.get_mario_pos()
     local cx, cy = Megaman_io.get_camera_pos()
 
-    for dy = -radius * 16, radius * 16, 16 do
-        for dx = -radius * 16, radius * 16, 16 do
+    for dy = -radius * 16, radius * 16, 16
+    do
+        for dx = -radius * 16, radius * 16, 16
+        do
             local tile = Megaman_io.get_tile(mx + dx, my + dy)
             local wall = 0
             local enemy = 0
             local powerup = 0
 
-            if tile ~= nil and tile.kind ~= -1 then
+            if tile ~= nil and tile.kind ~= -1
+            then
 
-                if tile.kind >= 0x100 then
+                if tile.kind >= 0x100
+                then
                     wall = 1
                 end
 
-                for _, sprite in ipairs(sprites) do
-                    if sprite.status ~= 0 then
-                        if Megaman_io.sprite_intersects(sprite, tile.x * 16, tile.y * 16, 16, 16) then
-                            if sprite.powerup then
+                for _, sprite in ipairs(sprites)
+                do
+                    if sprite.status ~= 0
+                    then
+                        if Megaman_io.sprite_intersects(sprite, tile.x * 16, tile.y * 16, 16, 16)
+                        then
+                            if sprite.powerup
+                            then
                                 powerup = 1
-                            elseif sprite.enemy then
+                            elseif sprite.enemy
+                            then
                                 enemy = 1
                             end
                         end
@@ -407,27 +417,110 @@ end
 
 function Megaman_io.get_sprites()
     sprites = {}
-    for slot = 0, SPRITE_COUNT do
-        table.insert(sprites, smw_io.get_sprite(slot))
+    for slot = 0, SPRITE_COUNT
+    do
+        table.insert(sprites, Megaman_io.get_sprite(slot))
     end
-    for slot = 0, EXTENDED_SPRITE_COUNT do
-        table.insert(sprites, smw_io.get_extended_sprite(slot))
+    for slot = 0, EXTENDED_SPRITE_COUNT
+    do
+        table.insert(sprites, Megaman_io.get_extended_sprite(slot))
     end
-    for slot = 0, MINOR_SPRITE_COUNT do
-        table.insert(sprites, smw_io.get_minor_sprite(slot))
+    for slot = 0, MINOR_SPRITE_COUNT
+    do
+        table.insert(sprites, Megaman_io.get_minor_sprite(slot))
     end
     return sprites
 end
 
+function Megaman_io.get_sprite(slot)
+    if read_u8(ADDR.SPRITE_STATUS + slot) ~= 0
+    then
+        return
+        {
+            x               = read_u8(ADDR.SPRITEX_LOWER + slot) + read_u8(ADDR.SPRITEX_HIGHER + slot) * 256,
+            y               = read_u8(ADDR.SPRITEY_LOWER + slot) + read_u8(ADDR.SPRITEY_HIGHER + slot) * 256,
+            status          = read_u8(ADDR.SPRITE_STATUS + slot),
+            number          = read_u8(ADDR.SPRITE_NUMBER + slot),
+            interact        = read_u8(ADDR.SPRITE_INTERACT + slot),
+            sprite_clipping = SPRITE_CLIPPINGS[read_u8(ADDR.SPRITE_MWR2 + slot) % 64],
+            enemy           = table.contains(ENEMY_SPRITES, read_u8(ADDR.SPRITE_NUMBER + slot)),
+            powerup         = table.contains(POWERUP_SPRITES, read_u8(ADDR.SPRITE_NUMBER + slot))
+        }
+    end
+    return nil
+end
+
+function Megaman_io.get_extended_sprite(slot)
+    if read_u8(ADDR.EXTENDED_SPRITE_NUMBER + slot) ~= 0
+    then
+        return
+        {
+            x               = read_u8(ADDR.EXTENDED_SPRITEX_LOWER + slot) + read_u8(ADDR.EXTENDED_SPRITEX_HIGHER + slot) * 256,
+            y               = read_u8(ADDR.EXTENDED_SPRITEY_LOWER + slot) + read_u8(ADDR.EXTENDED_SPRITEY_HIGHER + slot) * 256,
+            number          = read_u8(ADDR.EXTENDED_SPRITE_NUMBER + slot),
+            sprite_clipping = EXTENDED_SPRITE_CLIPPINGS[read_u8(ADDR.EXTENDED_SPRITE_NUMBER + slot)],
+            enemy           = table.contains(ENEMY_EXTENDED_SPRITES, read_u8(ADDR.EXTENDED_SPRITE_NUMBER + slot)),
+        }
+    end
+    return nil
+end
+
+function Megaman_io.get_minor_sprite(slot)
+    if read_u8(ADDR.MINOR_SPRITE_NUMBER + slot) ~= 0
+    then
+        return {
+            x               = read_u8(ADDR.MINOR_SPRITEX_LOWER + slot) + read_u8(ADDR.MINOR_SPRITEX_HIGHER + slot) * 256,
+            y               = read_u8(ADDR.MINOR_SPRITEY_LOWER + slot) + read_u8(ADDR.MINOR_SPRITEY_HIGHER + slot) * 256,
+            number          = read_u8(ADDR.MINOR_SPRITE_NUMBER + slot),
+            sprite_clipping = { x = 0, y = 0, w = 6, h = 6 },
+            enemy           = table.contains(ENEMY_MINOR_SPRITES, read_u8(ADDR.MINOR_SPRITE_NUMBER + slot)),
+        }
+    end
+    return nil
+end
+
 function Megaman_io.sprite_intersects(sprite, x, y, w, h)
-    if sprite.sprite_clipping ~= nil then
+    if sprite.sprite_clipping ~= nil
+    then
         if (sprite.x + sprite.sprite_clipping.x + sprite.sprite_clipping.w) < x or
             (sprite.y + sprite.sprite_clipping.y + sprite.sprite_clipping.h) < y or
             (sprite.x + sprite.sprite_clipping.x) > (x + w) or
-            (sprite.y + sprite.sprite_clipping.y) > (y + h) then
+            (sprite.y + sprite.sprite_clipping.y) > (y + h)
+            then
                 return false
         end
         return true
     end
     return false
+end
+
+
+function Megaman_io.enemies()
+    local cx = 0x00B4
+    local cy = 0x00B6
+
+    local enemies = {}
+		local x
+		local y
+		local camx = mainmemory.read_u16_le(cx)
+		local camy = mainmemory.read_u16_le(cy)
+		local base
+		local start = 0xE68 --3688
+		local oend = 32
+
+		for i = 0, oend,1 do
+
+			base = start + (i * 0x40) -- 3688 + (i * 64) || läser en fiende i taget
+
+			if i == 0 then
+				base = start
+			end
+
+			if mainmemory.read_u8(base) ~= 0 -- om minnet inte är laddat så finns de inte.
+			then
+				x = mainmemory.read_u16_le(base + 5) - camx -- unsigned 2 byte value
+				y = mainmemory.read_u16_le(base + 8) - camy
+            end
+		end
+    return enemies
 end
