@@ -6,16 +6,13 @@
 
 #pragma region lmao globals
 //struct it up
-const float MOVEMENT_TIMEOUT = 0.5;
+const float MOVEMENT_TIMEOUT = 1;
 const float PROGRESS_TIMEOUT = 1;
 
 int savestates = 1;
 
 int inputRadius = 6;
 int populationSize = 30;
-int buttonAmount = 10;
-
-bool firstTest = true;
 std::vector<Gene> genePerPop;
 
 
@@ -24,20 +21,17 @@ std::vector<int> buttonIndex; // = 14;
 std::vector<int> numInputs; //
 std::vector<int> numOutputs; // = 14 -- buttons
 
-std::vector<int> layers{ 7, 12 , 12 , buttonAmount }; // input - x - x - outputs
+std::vector<int> layers{ 8, 12 , 12 , 12 }; // input - x - x - outputs
 std::vector<int> numWeights;
 
 std::vector<float> randomTest;
-std::vector<float> pressButtons;
-std::vector<float> inputs;
 int currentPopulation;
 int currentSaveStateIndex = 1;
 int currentStateIndex;
 int currentGenomeIndex;
 
 #pragma region Checking progress
-int testCounter = 0;
-int populationCounter = 0;
+
 int totalFrames = 0;
 int lastMovementCounter = 0;
 int lastProgressCounter = 0;
@@ -49,7 +43,7 @@ int startMX = 0;
 int startMY = 0;
 int MX = 0;
 int MY = 0;
-int MHealth = 0;
+
 #pragma endregion
 
 int globalFitnessScore = 0;
@@ -62,19 +56,17 @@ ManageInputOutput* m = new ManageInputOutput;
 
 void CompleteTest();
 void InitNextTest();
-double oldTime = 0;
-double curTime;
-double deltaTime;
+
 #pragma region loop
 void Update()
 {
 	//Some GUI stuff ??
-	deltaTime = clock() - oldTime;
+
 	/*
 	106 - 121 IN LUA PROJECT
 
 
-	Gör inputs = std::vector<float>inputs;
+	Gï¿½r inputs = std::vector<float>inputs;
 	skicka till NN
 	set joystick
 	lessgo
@@ -84,36 +76,31 @@ void Update()
 
 	//TESTING
 	//----------------------------------------------
-	randomTest.clear();
-	randomTest.resize(0);
 
 
-	inputs = h->SetMegamanXOutput();
-
-	if (inputs.size() > 0) 
+	for(int i = 0; i < 12; i++)
 	{
-		pressButtons = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
-		m->SetButtonInput(pressButtons);
-		MX = h->GetMegamanXOutput()[0];
-		MY = h->GetMegamanXOutput()[1];
-		MHealth = h->GetMegamanXOutput()[2];
-
+		randomTest.push_back(h->GetRandomNumber());
 	}
+
+
+	m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, randomTest));
+	MX = m->GetEmulatorOutput()[2];
+	MY = m->GetEmulatorOutput()[3];
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
 	totalFrames++;
 
-	if(MX == 0 && MY == 0)//Kanske måste ändra värden för megaman
-		CompleteTest(); //"death or completed level" -- kan inte se skillnad på dem?
-	if (MHealth == 0)
-		CompleteTest();
+	if(MX == 0 && MY == 0)//Kanske mï¿½ste ï¿½ndra vï¿½rden fï¿½r megaman
+		CompleteTest(); //"death or completed level" -- kan inte se skillnad pï¿½ dem?
+
 	if(MX > maxMX)
 	{
 		lastProgressCounter = 0; //best in test
 	}
 	else
 	{
-		lastProgressCounter+= deltaTime;
+		lastProgressCounter++;
 		if(lastProgressCounter > PROGRESS_TIMEOUT)
 			CompleteTest(); //Progress timeout
 	}
@@ -131,22 +118,14 @@ void Update()
 	}
 	else
 	{
-		lastMovementCounter+= deltaTime;
+		lastMovementCounter++;
 		if(lastMovementCounter > MOVEMENT_TIMEOUT)
 			CompleteTest(); //Movement timeout
 	}
-	oldTime = clock();
 }
 
 void CompleteTest() //klar
 {
-	testCounter++;
-	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
-	for (int i = 0; i < pressButtons.size(); i++)
-	{
-		std::cout << "At index: " << i << " pressButton is: " << pressButtons[i] << std::endl;
-	}
-	firstTest = false;
 	float fitness = maxMX - startMX;
 	if(currentGenomeIndex < d->activePopulation.genes.size())
 		d->activePopulation.genes[currentGenomeIndex].fitness += fitness;
@@ -156,46 +135,19 @@ void CompleteTest() //klar
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
-	
 	InitNextTest();
-}
-
-std::vector<float> GetButtonInputs()
-{
-	if (pressButtons.size() != buttonAmount)
-	{
-		printf("pressButton array has %d amount of buttons instead of %d \n", pressButtons.size(), buttonAmount);
-	}
-	/*
-	local outputs = {}
-		for o = 1, Outputs do
-			local button = "P1 " ..ButtonNames[o]
-			if network.neurons[MaxNodes + o].value > 0 then
-				outputs[button] = true
-			else
-				outputs[button] = false
-			end
-		end
-	*/
-	for (int i = 0; i < buttonAmount; i++)
-	{
-
-	}
-	return pressButtons;
 }
 
 void InitNextTest()
 {
 
-	h->LoadEmuSaveState();
-	inputs = h->SetMegamanXOutput();
 	if(currentSaveStateIndex >= savestates)
 	{
-		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla på den sen
+		if(currentGenomeIndex >= d->activePopulation.genes.size()) // fel kolla pï¿½ den sen
 		{
 			d->RecalculatePopulationFitness(d->activePopulation);
 			d->EvolvePopulation(d->activePopulation);
-			std::cout << "New population generated\n";
+
 			currentGenomeIndex = 1;
 		}
 		else
@@ -206,9 +158,9 @@ void InitNextTest()
 			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 
 		/* 
-		//--------------------------------- Random nummer för test
-		Ganska säker på att detta är balony och inte bhr va här
-		for(int i = 0; i < buttonAmount; i++)
+		//--------------------------------- Random nummer fï¿½r test
+		Ganska sï¿½ker pï¿½ att detta ï¿½r balony och inte bhr va hï¿½r
+		for(int i = 0; i < 12; i++)
 		{
 			randomTest.push_back(h->GetRandomNumber());
 		}
@@ -226,8 +178,8 @@ void InitNextTest()
 	}
 
 
-	MX = m->GetEmulatorOutput()[0];
-	MY = m->GetEmulatorOutput()[1];
+	MX = m->GetEmulatorOutput()[2];
+	MY = m->GetEmulatorOutput()[3];
 	lastMX = MX;
 	lastMY = MY;
 	maxMX = MX;
@@ -244,22 +196,9 @@ void InitNextTest()
 
 int main()
 {
-	
-	srand((unsigned)time(NULL));
-	
+	srand((unsigned)3 * time(NULL));
 
-	for (int i = 0; i < 7683; i++)
-	{
-		if (i % 16 == 0)
-			std::cout << i << "\n";
-	}
-	for (int i = 0; i < 10; i++)
-	{
-		randomTest.push_back(h->GetRandomNumber());
-	}
-	pressButtons = randomTest;
 
-	h->SetMegamanXOutput();
 	//-------------------------------------------------------------------
 
 	int topology = h->GetNumWeights(layers); // weights
@@ -273,8 +212,7 @@ int main()
 		Update();
 		//lua emu. frameadvance
 	}
-	delete h;
-	h = nullptr;
+	
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 	return 0;
