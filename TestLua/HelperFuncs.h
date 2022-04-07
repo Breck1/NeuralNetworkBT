@@ -107,7 +107,7 @@ public:
 		return genes;
 	}
 	
-	std::vector<float> GenerateOutputs(std::vector<int> layers, std::vector<Gene> weights, std::vector<float> inputs)
+	std::vector<float> GenerateOutputs(std::vector<int> layers, Gene weights, std::vector<float> inputs)
 	{
 		std::vector<float> activations;
 		std::vector<float> nextActivations;
@@ -121,13 +121,13 @@ public:
 			for(int j = 0; j < layers[i + 1]; j++)
 			{
 				//set neuron activation to bias value
-				nextActivations.push_back(weights[j].weight[weightIndex]);
+				nextActivations.push_back(weights.weight[weightIndex]);
 				weightIndex++;
 
 				for(int k = 0; k < layers[i]; k++)
 				{
 					//add inputs * weight 
-					nextActivations[j] = weights[j].weight[weightIndex] * activations[k];
+					nextActivations[j] = weights.weight[weightIndex] * activations[k];
 					weightIndex++;
 				}
 

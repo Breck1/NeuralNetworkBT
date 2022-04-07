@@ -79,13 +79,13 @@ void Update()
 	inputs = h->SetMegamanXOutput();
 
 	if (inputs.size() > 0)
-		{
-			pressButton = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
-			m->SetButtonInput(pressButton);
-			MX = h->GetMegamanXOutput()[0];
-			MY = h->GetMegamanXOutput()[1];
-			MHealth = h->GetMegamanXOutput()[2];
-		}
+	{
+		pressButton = h->GenerateOutputs(layers, d->activePopulation.genes[testCounter], inputs);
+		m->SetButtonInput(pressButton);
+		MX = h->GetMegamanXOutput()[0];
+		MY = h->GetMegamanXOutput()[1];
+		MHealth = h->GetMegamanXOutput()[2];
+	}
 
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
@@ -118,7 +118,7 @@ void Update()
 	}
 	else
 	{
-		lastProgressCounter += deltaTime;
+		lastMovementCounter += deltaTime;
 		if(lastMovementCounter > MOVEMENT_TIMEOUT)
 			CompleteTest(); //Movement timeout
 	}
@@ -128,6 +128,9 @@ void Update()
 void CompleteTest() //klar
 {
 	testCounter++;
+
+	if (testCounter >= populationSize)
+		testCounter = 0;
 	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
 	for (int i = 0; i < pressButton.size(); i++)
 	{
@@ -213,16 +216,21 @@ void InitNextTest()
 		currentStateIndex++;
 	}
 
+	inputs = h->GetMegamanXOutput();
 
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
-	lastMX = MX;
-	lastMY = MY;
-	maxMX = MX;
-	maxMY = MY;
-	startMX = MX;
-	startMY = MY;
+	if (inputs.size() > 0)
+	{
 
+		MX = inputs[0];
+		MY = inputs[1];
+		lastMX = MX;
+		lastMY = MY;
+		maxMX = MX;
+		maxMY = MY;
+		startMX = MX;
+		startMY = MY;
+
+	}
 	totalFrames = 0;
 	lastMovementCounter = 0;
 	lastProgressCounter = 0;
