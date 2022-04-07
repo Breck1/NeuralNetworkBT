@@ -22,11 +22,11 @@ std::vector<int> numOutputs; // = 14 -- buttons
 
 Darwin darwin;
 std::vector<int> layers
-{ 
+{
 	darwin.layerGeneCount[0],
-	darwin.layerGeneCount[1], 
-	darwin.layerGeneCount[2], 
-	darwin.layerGeneCount[3] 
+	darwin.layerGeneCount[1],
+	darwin.layerGeneCount[2],
+	darwin.layerGeneCount[3]
 }; // input - x - x - outputs
 std::vector<int> numWeights;
 std::vector<float> randomTest;
@@ -78,14 +78,14 @@ void Update()
 
 	inputs = h->SetMegamanXOutput();
 
-	if (inputs.size() > 0)
-		{
-			pressButton = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
-			m->SetButtonInput(pressButton);
-			MX = h->GetMegamanXOutput()[0];
-			MY = h->GetMegamanXOutput()[1];
-			MHealth = h->GetMegamanXOutput()[2];
-		}
+	if(inputs.size() > 0)
+	{
+		pressButton = h->GenerateOutputs(layers, d->activePopulation.genes, inputs);
+		m->SetButtonInput(pressButton);
+		MX = h->GetMegamanXOutput()[0];
+		MY = h->GetMegamanXOutput()[1];
+		MHealth = h->GetMegamanXOutput()[2];
+	}
 
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);
 	//----------------------------------------------
@@ -100,7 +100,7 @@ void Update()
 	}
 	else
 	{
-		lastProgressCounter+= deltaTime;
+		lastProgressCounter += deltaTime;
 		if(lastProgressCounter > PROGRESS_TIMEOUT)
 			CompleteTest(); //Progress timeout
 	}
@@ -118,7 +118,7 @@ void Update()
 	}
 	else
 	{
-		lastProgressCounter += deltaTime;
+		lastMovementCounter += deltaTime;
 		if(lastMovementCounter > MOVEMENT_TIMEOUT)
 			CompleteTest(); //Movement timeout
 	}
@@ -129,7 +129,7 @@ void CompleteTest() //klar
 {
 	testCounter++;
 	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
-	for (int i = 0; i < pressButton.size(); i++)
+	for(int i = 0; i < pressButton.size(); i++)
 	{
 		std::cout << "At index: " << i << " pressButton is: " << pressButton[i] << std::endl;
 	}
@@ -147,7 +147,7 @@ void CompleteTest() //klar
 }
 std::vector<float> GetButtonInputs()
 {
-	if (pressButton.size() != buttonAmount)
+	if(pressButton.size() != buttonAmount)
 	{
 		printf("pressButton array has %d amount of buttons instead of %d \n", pressButton.size(), buttonAmount);
 	}
@@ -162,7 +162,7 @@ std::vector<float> GetButtonInputs()
 			end
 		end
 	*/
-	for (int i = 0; i < buttonAmount; i++)
+	for(int i = 0; i < buttonAmount; i++)
 	{
 
 	}
@@ -193,7 +193,7 @@ void InitNextTest()
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
 
-		/* 
+		/*
 		//--------------------------------- Random nummer f�r test
 		Ganska s�ker p� att detta �r balony och inte bhr va h�r
 		for(int i = 0; i < 12; i++)
@@ -205,7 +205,7 @@ void InitNextTest()
 		h->GenerateOutputs(layers, d->activePopulation.genes, randomTest);
 		//---------------------------------
 		*/
-		
+
 		currentStateIndex = 1;
 	}
 	else
@@ -214,8 +214,8 @@ void InitNextTest()
 	}
 
 
-	MX = m->GetEmulatorOutput()[2];
-	MY = m->GetEmulatorOutput()[3];
+	MX = m->GetEmulatorOutput()[0];
+	MY = m->GetEmulatorOutput()[1];
 	lastMX = MX;
 	lastMY = MY;
 	maxMX = MX;
@@ -242,13 +242,13 @@ int main()
 
 	//d->LoadPopulation(populationSize);
 	InitNextTest();
-	
+
 	while(true) //update until you lose or stand still too long
 	{
 		Update();
 		//lua emu. frameadvance
 	}
-	
+
 	delete d;
 	d = nullptr; //TODO cleaner klass ??
 	return 0;

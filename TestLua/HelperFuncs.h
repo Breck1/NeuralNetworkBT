@@ -10,7 +10,7 @@ class HelperFuncs
 	std::vector<float> megamanValues;
 
 public:
-	
+
 	template <typename T>
 	void Swap(T& a, T& b)
 	{
@@ -36,7 +36,7 @@ public:
 		return (float)rand() / RAND_MAX;
 
 	}
-	
+
 	float GetRandomNumber()
 	{
 		return (float)rand() / RAND_MAX;
@@ -46,12 +46,12 @@ public:
 	{
 		return (int)rand() / RAND_MAX;
 	}
-	
+
 	int GetRandomIntNumber(int max, int min)
 	{
 		return (int)rand() % (max - min + 1) + min;
 	}
-	
+
 	E_Selection GetRandomSelection()
 	{
 		E_Selection val = static_cast<E_Selection>(GetRandomIntNumber(1, 0));
@@ -86,27 +86,10 @@ public:
 		std::string line;
 		genes.resize(size);
 		int i = 0;
-		//while(std::getline(file, line))
-		//{
-		//	float value;
-		//	
-		//	std::stringstream ss(line);
-		//	
-		//		for (size_t j = 0; j < 420; j++)
-		//		{
-		//			ss >> value;
-
-		//			genes[i].weight.push_back(value);
-		//			std::cout << j << " " << genes[i].weight[j] << std::endl;
-
-		//		}
-		//		i++;
-		//	
-		//}
 
 		return genes;
 	}
-	
+
 	std::vector<float> GenerateOutputs(std::vector<int> layers, std::vector<Gene> weights, std::vector<float> inputs)
 	{
 		std::vector<float> activations;
@@ -138,6 +121,7 @@ public:
 			activations = nextActivations;
 			nextActivations.clear();
 		}
+
 		return activations;
 	}
 
@@ -153,16 +137,16 @@ public:
 
 			std::stringstream ss(luaLine);
 
-				ss >> value;
-				megamanXoutput.push_back(value);
-				//std::cout << "MegamanStatus.txt Line: " << " Value: " << value << std::endl;
+			ss >> value;
+			megamanXoutput.push_back(value);
+			//std::cout << "MegamanStatus.txt Line: " << " Value: " << value << std::endl;
 
-			//for(size_t j = 0; j < 8; j++)
-			//{
-			//	std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;
-			//	//std::cout << j << " " << genes[k].weight[j] << std::endl;
+		//for(size_t j = 0; j < 8; j++)
+		//{
+		//	std::cout << "MegamanStatus.txt Line: " << j << " Value: " << value << std::endl;
+		//	//std::cout << j << " " << genes[k].weight[j] << std::endl;
 
-			//}
+		//}
 
 			k++;
 
@@ -195,7 +179,7 @@ public:
 	{
 		std::ofstream file("LuaScript/LoadState.txt");
 		std::string line = "0";
-		
+
 		file << line << std::endl;
 		file.close();
 	}
