@@ -17,7 +17,7 @@ Darwin::~Darwin()
 
 std::vector<Gene> Darwin::InitGenes(int topology)
 {
-	std::vector<int> layers = { 8, 12, 12, 12 };
+	std::vector<int> layers = { layerGeneCount[0], layerGeneCount[1], layerGeneCount[2], layerGeneCount[3] };
 	std::vector<Gene> genePerPop;
 
 	for(size_t i = 0; i < topology; i++)
@@ -40,7 +40,7 @@ std::vector<Gene> Darwin::InitGenes(int topology)
 
 std::vector<Gene> Darwin::LoadGenes(int topology)
 {
-	std::vector<int> layers = { 8, 12, 12, 12 };
+	std::vector<int> layers = { layerGeneCount[0], layerGeneCount[1], layerGeneCount[2], layerGeneCount[3] };
 	std::vector<Gene> genePerPop;
 
 	for(size_t i = 0; i < topology; i++)
@@ -195,15 +195,10 @@ void Darwin::EvolvePopulation(Population elites)
 	int numElites = elites.numElites;
 
 	// copy elites
+	Population mutated;
 	for(int i = 0; i < numElites; i++)
 	{
 		newPopulation.genes.push_back(elites.genes[i]);
-	}
-
-	Population mutated;
-	// create the rest by mutation and crossover
-	while(newPopulation.genes.size() < elites.numElites)
-	{
 		Population mother;
 		Population father;
 		Population child;
@@ -218,6 +213,11 @@ void Darwin::EvolvePopulation(Population elites)
 
 		newPopulation = mutated;
 	}
+
+	// create the rest by mutation and crossover
+	//while(newPopulation.genes.size() < elites.numElites)
+	//{
+	//}
 
 	elites.genes = newPopulation.genes;
 	generations++;

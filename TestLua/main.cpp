@@ -20,9 +20,15 @@ std::vector<int> buttonIndex; // = 14;
 std::vector<int> numInputs; //
 std::vector<int> numOutputs; // = 14 -- buttons
 
-std::vector<int> layers{ 7, 12 , 12 , 12 }; // input - x - x - outputs
+Darwin darwin;
+std::vector<int> layers
+{ 
+	darwin.layerGeneCount[0],
+	darwin.layerGeneCount[1], 
+	darwin.layerGeneCount[2], 
+	darwin.layerGeneCount[3] 
+}; // input - x - x - outputs
 std::vector<int> numWeights;
-
 std::vector<float> randomTest;
 std::vector<float> pressButton;
 std::vector<float> inputs;
@@ -69,31 +75,6 @@ bool firstTest = true;
 void Update()
 {
 	deltaTime = clock() - oldTime;
-	//Some GUI stuff ??
-
-	/*
-	106 - 121 IN LUA PROJECT
-
-
-	G�r inputs = std::vector<float>inputs;
-	skicka till NN
-	set joystick
-	lessgo
-	*/
-	//----------------------------------------------
-
-
-	//TESTING
-	//----------------------------------------------
-
-
-	//for(int i = 0; i < 12; i++)
-	//{
-	//	randomTest.push_back(h->GetRandomNumber());
-	//}
-	randomTest.clear();
-	randomTest.resize(0);
-
 
 	inputs = h->SetMegamanXOutput();
 
@@ -104,9 +85,6 @@ void Update()
 			MX = h->GetMegamanXOutput()[0];
 			MY = h->GetMegamanXOutput()[1];
 			MHealth = h->GetMegamanXOutput()[2];
-			randomTest.push_back(h->GetRandomNumber());
-
-			m->SetButtonInput(h->GenerateOutputs(layers, d->activePopulation.genes, pressButton));
 		}
 
 	//h->Load("ReadWriteTest.txt", genePerPop, 12);

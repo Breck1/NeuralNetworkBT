@@ -43,6 +43,7 @@ public:
 	Gene GetBestGenome(Population pop);
 	Gene GetWorstGenome(Population pop);
 #pragma endregion
+	const int layerGeneCount[4] = { 7, 12, 12, 12 };
 private:
 	HelperFuncs* hf;
 	int generations = 0;
