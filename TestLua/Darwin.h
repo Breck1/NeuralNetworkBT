@@ -6,7 +6,6 @@
 #include <string>
 #include "Population.h"
 #include "Genome.h"
-#include "NeuralNetwork.h"
 #include "HelperFuncs.h"
 
 
@@ -29,6 +28,7 @@ public:
 #pragma region population methods
 
 	void InitPopulation(int popSize);
+	Population InitNewPopulation(int popSize);
 	void LoadPopulation(int popSize);
 	Gene SelectGenome(Population pop);
 	void RecalculatePopulationFitness(Population pop); //klar 
@@ -37,8 +37,8 @@ public:
 
 #pragma region get genomes
 
-    Population GetActivePopulation();
-    int GetGeneration();
+	Population GetActivePopulation();
+	int GetGeneration();
 	std::string GetGenerationString(Population pop);
 	Gene GetBestGenome(Population pop);
 	Gene GetWorstGenome(Population pop);

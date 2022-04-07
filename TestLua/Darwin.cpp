@@ -117,6 +117,27 @@ void Darwin::InitPopulation(int popSize)
 	activePopulation = p;
 }
 
+Population Darwin::InitNewPopulation(int popsize)
+{
+	Population p;
+	p.avgFitness = 0;
+	p.maxFitness = 0;
+	p.minFitness = 0;
+	p.totalFitness = 0;
+	p.mutMax = 0.5f;
+	p.mutRate = 0.2f;
+	p.numElites = 2;
+	p.crossRate = 0.7f;
+
+	p.selection = hf->GetRandomSelection();
+	p.name = "";
+	p.genes = InitGenes(popsize);
+
+	activePopulation = p;
+
+	return p;
+}
+
 void Darwin::LoadPopulation(int popSize)
 {
 	Population p;
@@ -126,7 +147,7 @@ void Darwin::LoadPopulation(int popSize)
 	p.numElites = 2;
 	p.crossRate = 0.7f;
 
-	
+
 	p.selection = hf->GetRandomSelection();
 	p.name = "";
 	p.genes = LoadGenes(popSize);
@@ -181,11 +202,11 @@ void Darwin::RecalculatePopulationFitness(Population pop)
 	}
 	if(pop.totalFitness != 0)
 		pop.avgFitness = pop.totalFitness / pop.genes.size();
-	
+
 	pop.maxFitness = tempMaxFit;
 	pop.minFitness = tempMinFit;
 	hf->SortGenes(pop.genes); //Otestat
-	
+
 }
 
 void Darwin::EvolvePopulation(Population elites)
@@ -195,12 +216,12 @@ void Darwin::EvolvePopulation(Population elites)
 	int numElites = elites.numElites;
 
 	// copy elites
-	Population mutated;
+	Population mutated = InitNewPopulation(30);
 	for(int i = 0; i < numElites; i++)
 	{
 		newPopulation.genes.push_back(elites.genes[i]);
-		Population mother;
-		Population father;
+		Population mother = InitNewPopulation(29);
+		Population father = InitNewPopulation(29);
 		Population child;
 		mother.genes.push_back(SelectGenome(elites));
 		father.genes.push_back(SelectGenome(elites));
@@ -214,10 +235,6 @@ void Darwin::EvolvePopulation(Population elites)
 		newPopulation = mutated;
 	}
 
-	// create the rest by mutation and crossover
-	//while(newPopulation.genes.size() < elites.numElites)
-	//{
-	//}
 
 	elites.genes = newPopulation.genes;
 	generations++;

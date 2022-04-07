@@ -227,10 +227,10 @@ function enemies()
 				then
 					fill = 0x40FFFF00 -- Gul = bad
 					outl = 0xFFFFFF00 -- skott och drops
-					print("i has number")
-					print(i) -- falling platform at miniboss 'i' = 31
-					print("value at base")
-					print(base) -- falling platform at miniboss, 'base' = 5672, x position at memory address 0x164A
+					--print("i has number")
+					--print(i) -- falling platform at miniboss 'i' = 31
+					--print("value at base")
+					--print(base) -- falling platform at miniboss, 'base' = 5672, x position at memory address 0x164A
 				end
 	
 				facing = mainmemory.read_u8(base + 0x11)
@@ -320,29 +320,7 @@ local function tileData()
 
 end
 
---[[
 
-	x = mainmemory.read_u16_le(base + 5) - camx
-	y = mainmemory.read_u16_le(base + 8) - camy
-	boxpointer = mainmemory.read_u16_le(base +0x20) + 0x28000
-
-	fill = 0x40000000 -- svart
-	outl = 0xFF000000 -- gör ingenting
-	for i = 0, 0x028, 1 
-	do
-		testPointer = memory.read_u16_le(tileTest + i);
-		print("for loop i value: " ..i)
-		print("TestPointer: "..testPointer)
-	end
-
-	xtestoff = memory.read_s8(testPointer + 0)
-	ytestoff = memory.read_s8(testPointer + 1)
-	xtestrad = memory.read_u8(testPointer + 2)
-	ytestrad = memory.read_u8(testPointer + 3)
-	gui.drawBox(x + xtestoff +xtestrad,y + ytestoff + ytestrad,x + xtestoff - xtestrad,y + ytestoff - ytestrad,outl, fill)
-
-end
-]]
 function scaler()
 	if client ~= nil
 	then
@@ -412,6 +390,7 @@ local function SetJoypadInput()
 			joypad.set(buttonsPressed, 1)
 		end
 end
+
 local function LoadState()
 	lines = {}
 	local file = io.open("LoadState.txt", "r+")
@@ -431,7 +410,7 @@ local function LoadState()
 		file:close()
 	end
 end
---local binput2 = ButtonInput2.new(12)
+
 if mainmemory ~= nil
 then
 while true do
