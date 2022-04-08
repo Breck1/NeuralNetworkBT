@@ -38,13 +38,13 @@ void ManageInputOutput::SetButtonInput(std::vector<float> geneOutput)
 	emulatorInput.resize(genomeSize);
 	for(int i = 0; i < genomeSize; i++)
 	{
-		file << ((geneOutput[i] > 0.6f) ? "1" : "0") << std::endl;
+		file << ((geneOutput[i] > pressButtonLimit) ? "1" : "0") << std::endl;
 
 		//if(geneOutput[i] > 0.5f)
 		//	file << std::endl << 1;
 		//else
 		//	file << std::endl << 0;
-		emulatorInput[i] = geneOutput[i] > 0.5f;
+		emulatorInput[i] = geneOutput[i] > pressButtonLimit;
 		//std::cout << "geneOutput i: " << i << " Gene output " << geneOutput[i] << std::endl;
 	}
 		file.close();

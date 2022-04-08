@@ -220,11 +220,11 @@ void Darwin::EvolvePopulation(Population elites)
 	for(int i = 0; i < numElites; i++)
 	{
 		newPopulation.genes.push_back(elites.genes[i]);
-		Population mother = InitNewPopulation(29);
-		Population father = InitNewPopulation(29);
+		Population mother = InitNewPopulation(30);
+		Population father = InitNewPopulation(30);
 		Population child;
-		mother.genes.push_back(SelectGenome(elites));
-		father.genes.push_back(SelectGenome(elites));
+		mother.genes[mother.genes.size() - 1] = SelectGenome(elites);
+		father.genes[father.genes.size() - 1] = SelectGenome(elites);
 		child = mother;
 
 		if(hf->GetRandomNumber() < elites.crossRate)

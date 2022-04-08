@@ -17,7 +17,6 @@ struct EmulatorOutput
 	float megamanState = 0;
 	float megamanBitflags = 0;
 	//float tileDirection = 0;
-
 	float distanceFromStartPosition = 0;
 };
 class ManageInputOutput
@@ -32,4 +31,5 @@ private:
 	EmulatorOutput emulatorOutput;
 	std::vector<float>getOutput{ 0, 0, 0, 0, 0, 0, 0 };
 	std::vector<bool> emulatorInput;
+	float pressButtonLimit = 0.65f;
 };

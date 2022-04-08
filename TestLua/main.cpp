@@ -65,9 +65,9 @@ ManageInputOutput* m = new ManageInputOutput;
 void CompleteTest();
 void InitNextTest();
 
-double oldTime = 0;
-double curTime;
-double deltaTime;
+clock_t oldTime = 0;
+clock_t curTime;
+clock_t deltaTime;
 int testCounter = 0;
 int populationCounter = 0;
 bool firstTest = true;
@@ -131,7 +131,7 @@ void CompleteTest() //klar
 
 	if (testCounter >= populationSize)
 		testCounter = 0;
-	std::cout << "finish test.\n Test number: " << testCounter << std::endl;
+	std::cout << "Population number " << populationCounter + 1 << " has finsihed their " << testCounter << " test" << std::endl;
 	for (int i = 0; i < pressButton.size(); i++)
 	{
 		std::cout << "At index: " << i << " pressButton is: " << pressButton[i] << std::endl;
@@ -146,30 +146,8 @@ void CompleteTest() //klar
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			globalFitnessScore = std::max((int)std::floorf(d->activePopulation.genes[currentGenomeIndex].fitness), globalFitnessScore);
 	}
-	InitNextTest();
-}
-std::vector<float> GetButtonInputs()
-{
-	if (pressButton.size() != buttonAmount)
-	{
-		printf("pressButton array has %d amount of buttons instead of %d \n", pressButton.size(), buttonAmount);
-	}
-	/*
-	local outputs = {}
-		for o = 1, Outputs do
-			local button = "P1 " ..ButtonNames[o]
-			if network.neurons[MaxNodes + o].value > 0 then
-				outputs[button] = true
-			else
-				outputs[button] = false
-			end
-		end
-	*/
-	for (int i = 0; i < buttonAmount; i++)
-	{
 
-	}
-	return pressButton;
+	InitNextTest();
 }
 
 void InitNextTest()
@@ -195,19 +173,6 @@ void InitNextTest()
 		}
 		if(currentGenomeIndex < d->activePopulation.genes.size())
 			d->activePopulation.genes[currentGenomeIndex].fitness = 0;
-
-		/* 
-		//--------------------------------- Random nummer f�r test
-		Ganska s�ker p� att detta �r balony och inte bhr va h�r
-		for(int i = 0; i < 12; i++)
-		{
-			randomTest.push_back(h->GetRandomNumber());
-		}
-
-
-		h->GenerateOutputs(layers, d->activePopulation.genes, randomTest);
-		//---------------------------------
-		*/
 		
 		currentStateIndex = 1;
 	}

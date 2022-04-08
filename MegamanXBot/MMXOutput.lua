@@ -1,0 +1,9 @@
+output = {}
+output.MX = 0
+output.MY = 0
+output.megamanHealth = 0
+output.enemyPositionX = 0
+output.enemyPositionY = 0
+output.megamanState = 0
+output.megamanBitflags = 0
+output.deathPositionX = 0
