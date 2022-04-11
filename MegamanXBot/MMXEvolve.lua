@@ -22,9 +22,9 @@ function InitGenes(topology)
 			for j = 0, GetNumWeights(layers)--fix with proper vector.
 			do
 				table.insert(gene.weight, math.random())
-				table.insert(genePerPopulation, gene)
 				
 			end	
+			table.insert(genePerPopulation, gene)
 		end
 		return genePerPopulation;
 end

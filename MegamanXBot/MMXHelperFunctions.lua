@@ -68,27 +68,18 @@ function GenerateOutputs(layers, weights, inputs)
 
 	for k,v in pairs(inputs) do
 		activations[index] = v
-		--print(activations[index])
 		index = index + 1
 	end
-	--index = 1
-	-- for i = 1, #inputs 
-	-- do
-	-- 	activations[i] = inputs[i]
-	-- end
-	--print(activations)
-	--[[
-		]]
-
+	--print(weights)
+		
 		for i = 1, #layers - 1, 1
 		do
 			for j = 1, layers[i + 1], 1
 			do
-			nextActivations[j] = weights[i].weight[j]
-			--weightIndex = weightIndex + 1
+			nextActivations[j] = weights.weight[j]
 			for k = 1, layers[i]
 			do
-				nextActivations[j] = nextActivations[j] + weights[i].weight[j] * activations[k]
+				nextActivations[j] = nextActivations[j] + weights.weight[j] * activations[k]
 				weightIndex = weightIndex + 1
             end
 			--sigmoid
@@ -98,6 +89,7 @@ function GenerateOutputs(layers, weights, inputs)
 		activations = nextActivations;
 		nextActivations = {}
 	end
+	--print(activations)
 	return activations
 end
 
@@ -119,7 +111,7 @@ function SortGenes(genes)
     do
 		for j = 1, #genes - i - 1	
         do
-			if genes[j].weight < genes[j + 1].weight
+			if genes[j].fitness < genes[j + 1].fitness
 			then	
                 Swap(genes[j], genes[j + 1])
             end

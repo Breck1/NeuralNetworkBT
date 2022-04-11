@@ -321,6 +321,7 @@ local function SetJoypadInput()
 		then
 			joypad.set(buttonsPressed, 1)
 		end
+		--print(pressButton)
 end
 
 

@@ -6,7 +6,7 @@ activePopulation = Population
 layerGeneCount= { [1] = 7, [2] = 12, [3] = 12, [4] = 12 };
 MOVEMENT_TIMEOUT = 60
 PROGRESS_TIMEOUT = 60
-testCounter = 0
+testCounter = 1
 populationCounter = 0
 savestates = 1
 
@@ -84,7 +84,9 @@ function RecalculatePopulationFitness(population)
     end
 	population.maxFitness = tempMaxFit
 	population.minFitness = tempMinFit
-	SortGenes(population.genes); --Otestat
+	--table.sort(population.genes)
+	table.sort(population.genes, function(a,b) return a.fitness > b.fitness end)
+	--SortGenes(population.genes); --Otestat
 
 end
 
@@ -116,32 +118,18 @@ function GetWorstGenome(population)
 end
 
 function Update()
-	
-    --print(#output)
-	--print(activePopulation.genes.weight)
-	
-	--if (#output > 0)
-	--then
-		--print(output)
-		pressButton = GenerateOutputs(layers, activePopulation.genes, output)
+
+		pressButton = GenerateOutputs(layers, activePopulation.genes[testCounter], output)
 		MX = output["MX"]
 		MY = output["MY"]
 		MHealth = output["megamanHealth"]
-		--print(output)
-		-- for i = 1, #pressButton
-		-- do
-		-- print("At index: "..i.." pressButton is: "..pressButton[i])
-		-- end 
-    --end
-
-	--helpFunctions.Load("ReadWriteTest.txt", genePerPop, 12);
 	----------------------------------------------
 	totalFrames = totalFrames + 1
 	if MX == 0 and MY == 0 -- Kanske m�ste �ndra v�rden f�r megaman
     then
 		CompleteTest() --"death or completed level" -- kan inte se skillnad p� dem?
-    
-	elseif MX > maxMX
+	end	
+	if MX > maxMX
 	then
 		lastProgressCounter = 0 --best in test	
 	else
@@ -179,22 +167,19 @@ end
 function InitNextTest()
 
 	savestate.load(StateName)
-	
 	if currentSaveStateIndex >= savestates
 	then
-		if currentGenomeIndex >= #activePopulation.genes -- fel kolla p� den sen
+
+		if currentGenomeIndex > #activePopulation.genes -- fel kolla p� den sen
 		then
+			print("Evolve population")
 			RecalculatePopulationFitness(activePopulation);
 			EvolvePopulation(activePopulation);
 			populationCounter = populationCounter + 1
 
-			--print("New population generated")
-			--print( "Population number: "..populationCounter)
-
 			currentGenomeIndex = 1
 		
 		else
-		
 			currentGenomeIndex = currentGenomeIndex + 1
         end
 		if currentGenomeIndex < #activePopulation.genes
@@ -203,49 +188,35 @@ function InitNextTest()
 		end
 		currentStateIndex = 1
 	else
-        
         currentStateIndex = currentStateIndex + 1
-        
     end
-
 	
-
-	if #output > 0
-	then
-
-		MX = output[1]
-		MY = inputs[2]
-		lastMX = MX
-		lastMY = MY
-		maxMX = MX
-		maxMY = MY
-		startMX = MX
-		startMY = MY
-
-    end 
-
+	MX = output["MX"]
+	MY = output["MY"]
+	lastMX = MX
+	lastMY = MY
+	maxMX = MX
+	maxMY = MY
+	startMX = MX
+	startMY = MY
 	totalFrames = 0
 	lastMovementCounter = 0
 	lastProgressCounter = 0
-
 end
 
 function CompleteTest() --klar
-
+	print("CompleteTest")
 	testCounter = testCounter + 1
-
+	lastMovementCounter = 0
+	lastProgressCounter = 0
 	if testCounter >= populationSize
     then
 		testCounter = 1
 	end
-    print("Population number "..populationCounter.." has finsihed their "..testCounter.." test\n")
-	for i = 1, #pressButton
-	do
-	print("At index: "..i.." pressButton is: "..pressButton[i])
-    end 
+	print("Population number "..populationCounter.." has finsihed their "..testCounter.." test\n")
 	firstTest = false
 	local fitness = maxMX - startMX
-	if currentGenomeIndex < #activePopulation.genes
+	if currentGenomeIndex <= #activePopulation.genes
     then
 		activePopulation.genes[currentGenomeIndex].fitness = activePopulation.genes[currentGenomeIndex].fitness + fitness
     end
