@@ -299,7 +299,6 @@ local function SetJoypadInput()
 
 		local getInput = {}
 		getInput = buttonInput
-		--getInput = buttonInput
 		local buttonsPressed = {}
 		
 		local buttonsToPress = pressButton

@@ -12,23 +12,21 @@ function InitGenes(topology)
 	end
 		layers = { layerGeneCount[1], layerGeneCount[2], layerGeneCount[3], layerGeneCount[4] }
 		genePerPopulation = {}
-		
 		for t = 1, topology
 		do
+			
 			gene = {}
 			gene.fitness = 0
 			gene.index = t
 			gene.weight = {}
-		
-		for j = 0, GetNumWeights(layers)--fix with proper vector.
-		do
-            table.insert(gene.weight, math.random())
-        	end
-			table.insert(genePerPopulation, gene)
-		
+			for j = 0, GetNumWeights(layers)--fix with proper vector.
+			do
+				table.insert(gene.weight, math.random())
+				table.insert(genePerPopulation, gene)
+				
+			end	
 		end
-
-	return genePerPop;
+		return genePerPopulation;
 end
 
 function InitPopulation(populationSize)

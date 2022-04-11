@@ -1,5 +1,5 @@
 
-
+Gene = {}
 Gene =
 {
 
@@ -7,7 +7,9 @@ Gene =
 	index = 0,
 	weight = {},
 }
-
+function GetGene()
+	return Gene
+end
 Population =
 {
 	maxFitness,
@@ -23,9 +25,13 @@ Population =
 	name,
 
 	selection,
-	genes = {}
+	
+	genes = GetGene(),
+
+
 
 }
+
 topologyCount = 0
 	
 function Swap(a, b)
@@ -46,30 +52,46 @@ function GetNumWeights(topology)
     end 
 	return num;
 end
-
+function table.shallow_copy(t)
+	local t2 = {}
+	for k,v in pairs(t) do
+	  t2[k] = v
+	end
+	return t2
+  end
 	
 function GenerateOutputs(layers, weights, inputs)
 	local activations = {}
 	local nextActivations = {}
-	local weightIndex = 0
+	local weightIndex = 1
+	local index = 1
 
-    activations = inputs
+	for k,v in pairs(inputs) do
+		activations[index] = v
+		--print(activations[index])
+		index = index + 1
+	end
+	--index = 1
+	-- for i = 1, #inputs 
+	-- do
+	-- 	activations[i] = inputs[i]
+	-- end
+	--print(activations)
+	--[[
+		]]
 
-	for i = 1, #layers - 1, 1
-	do
-		for j = 1, layers[i + 1], 1
+		for i = 1, #layers - 1, 1
 		do
-			--set neuron activation to bias value
-			table.insert(nextActivations, weights.weight[weightIndex])
-			weightIndex = weightIndex + 1
-			for k = 1, k < layers[i], 1
+			for j = 1, layers[i + 1], 1
 			do
-				--add inputs * weight 
-				nextActivations[j] = weights.weight[weightIndex] * activations[k]
+			nextActivations[j] = weights[i].weight[j]
+			--weightIndex = weightIndex + 1
+			for k = 1, layers[i]
+			do
+				nextActivations[j] = nextActivations[j] + weights[i].weight[j] * activations[k]
 				weightIndex = weightIndex + 1
             end
-
-				--sigmoid
+			--sigmoid
 			nextActivations[j] = 1 / (1 + math.exp(-nextActivations[j]))
 		end
 		--go to next layer

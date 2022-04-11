@@ -1,5 +1,6 @@
 dofile("MMXHelperFunctions.lua")
 dofile("MMXEvolve.lua")
+dofile("MMXOutput.lua")
 StateName = "MMX.state"
 activePopulation = Population
 layerGeneCount= { [1] = 7, [2] = 12, [3] = 12, [4] = 12 };
@@ -42,8 +43,8 @@ pressButton[10] = 0
 inputs = {}
 currentPopulation = 0
 currentSaveStateIndex = 1
-currentStateIndex = 0
-currentGenomeIndex = 0 
+currentStateIndex = 1
+currentGenomeIndex = 1 
 
 buttonAmount = 10
 totalFrames = 0
@@ -101,9 +102,9 @@ function GetGenerationString(population)
 	generationString = "Generations: "
 	generationString = generationString..generations
 	generationString = generationString.." max: "
-	generationString = generationString..popopulation.maxFitness
+	generationString = generationString..population.maxFitness
 	generationString = generationString.." avg: "
-	generationString = generationString..popopulation.avgFitness
+	generationString = generationString..population.avgFitness
 	return generationString;
 end
 function GetBestGenome(population)
@@ -111,29 +112,36 @@ function GetBestGenome(population)
 	return popopulation.genes[1]
 end
 function GetWorstGenome(population) 
-	return population[#popopulation]
+	return population[#population]
 end
 
 function Update()
 	
-    
-	if (#output > 0)
-	then
-		pressButton =  GenerateOutputs(layers, activePopulation.genes[testCounter], output)
-		MX = output[1]
-		MY = output[2]
-		MHealth = output[3]
-    end
+    --print(#output)
+	--print(activePopulation.genes.weight)
+	
+	--if (#output > 0)
+	--then
+		--print(output)
+		pressButton = GenerateOutputs(layers, activePopulation.genes, output)
+		MX = output["MX"]
+		MY = output["MY"]
+		MHealth = output["megamanHealth"]
+		--print(output)
+		-- for i = 1, #pressButton
+		-- do
+		-- print("At index: "..i.." pressButton is: "..pressButton[i])
+		-- end 
+    --end
 
 	--helpFunctions.Load("ReadWriteTest.txt", genePerPop, 12);
 	----------------------------------------------
-	totalFrames = totalFrames + 1;
-
+	totalFrames = totalFrames + 1
 	if MX == 0 and MY == 0 -- Kanske m�ste �ndra v�rden f�r megaman
     then
 		CompleteTest() --"death or completed level" -- kan inte se skillnad p� dem?
-    end
-	if MX > maxMX
+    
+	elseif MX > maxMX
 	then
 		lastProgressCounter = 0 --best in test	
 	else
@@ -180,8 +188,8 @@ function InitNextTest()
 			EvolvePopulation(activePopulation);
 			populationCounter = populationCounter + 1
 
-			print("New population generated")
-			print( "Population number: "..populationCounter)
+			--print("New population generated")
+			--print( "Population number: "..populationCounter)
 
 			currentGenomeIndex = 1
 		
@@ -233,18 +241,19 @@ function CompleteTest() --klar
     print("Population number "..populationCounter.." has finsihed their "..testCounter.." test\n")
 	for i = 1, #pressButton
 	do
-		print("At index: "..i.." pressButton is: "..pressButton[i])
+	print("At index: "..i.." pressButton is: "..pressButton[i])
     end 
 	firstTest = false
-	fitness = maxMX - startMX
+	local fitness = maxMX - startMX
 	if currentGenomeIndex < #activePopulation.genes
     then
-        activePopulation.genes[currentGenomeIndex].fitness = activePopulation.genes[currentGenomeIndex].fitness + fitness
+		activePopulation.genes[currentGenomeIndex].fitness = activePopulation.genes[currentGenomeIndex].fitness + fitness
     end
 	if currentSaveStateIndex == savestates 
 	then
 		if currentGenomeIndex < #activePopulation.genes
 		then	
+			local globalFitnessScore = 0
             globalFitnessScore = math.max(activePopulation.genes[currentGenomeIndex].fitness, globalFitnessScore)
         end
 	end
